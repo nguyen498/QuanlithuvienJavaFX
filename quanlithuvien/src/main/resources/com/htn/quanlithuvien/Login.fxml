@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.20001220703125" minWidth="10.0" prefWidth="82.59996795654297" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.40003204345703" minWidth="10.0" prefWidth="302.40003204345703" />
@@ -32,7 +32,7 @@
             <Font size="39.0" />
          </font>
       </Text>
-      <Button contentDisplay="CENTER" maxHeight="40.0" maxWidth="100.0" mnemonicParsing="false" text="Đăng nhập" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+      <Button fx:id="btnLogin" contentDisplay="CENTER" maxHeight="40.0" maxWidth="100.0" mnemonicParsing="false" text="Đăng nhập" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
       <Button contentDisplay="CENTER" maxHeight="40.0" maxWidth="100.0" mnemonicParsing="false" text="Đăng kí" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets right="5.0" />
