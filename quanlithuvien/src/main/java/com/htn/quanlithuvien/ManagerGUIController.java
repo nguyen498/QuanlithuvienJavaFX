@@ -12,10 +12,14 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
@@ -31,15 +35,24 @@ public class ManagerGUIController implements Initializable {
      */
     
     @FXML private TableView <Book> tbBook;
+    @FXML private TextField txtName;
+    @FXML private TextField txtDescription;
+    @FXML private TextField txtPrice;
+    @FXML private TextField txtDateOfPurcharse;
+    @FXML private TextField txtPublicationPlace;
+    @FXML private ComboBox <String> cbStatus;
+    
+    ObservableList<String> list = FXCollections.observableArrayList("Còn", "Hết");
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         this.loadColumn();
         this.loadData(null);
+        cbStatus.setItems(list);
     }    
     
-     private void loadData(String kw) {
+    private void loadData(String kw) {
         try {
             this.tbBook.setItems(FXCollections.observableList(s.getBook(kw)));
         } catch (SQLException ex) {
@@ -72,20 +85,14 @@ public class ManagerGUIController implements Initializable {
         col6.setCellValueFactory(new PropertyValueFactory("publicationPlace"));
         col6.setPrefWidth(100);
         
-        TableColumn col7 = new TableColumn("Authors");
-        col7.setCellValueFactory(new PropertyValueFactory("authors"));
-        col7.setPrefWidth(100);
+        TableColumn col7 = new TableColumn("Status");
+        col7.setCellValueFactory(new PropertyValueFactory("status"));
+        col7.setPrefWidth(50);
         
-        TableColumn col8 = new TableColumn("Status");
-        col8.setCellValueFactory(new PropertyValueFactory("status"));
-        col8.setPrefWidth(50);
-        
-        TableColumn col9 = new TableColumn("CateID");
-        col9.setCellValueFactory(new PropertyValueFactory("categoryId"));
-        col9.setPrefWidth(50);
-        
-        
-        this.tbBook.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7, col8, col9);
+        this.tbBook.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
      }
     
+     public static void addBook(ActionEvent evt) {
+        
+    }
 }

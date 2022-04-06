@@ -17,27 +17,22 @@ public class Book {
     private double price;
     private Date dateOfPurcharse;
     private String publicationPlace;
-    private int authors;
-    private boolean  status;
-    private int categoryId;
-    
-    
+    private int status;
 
     public Book() {
     }
 
-    public Book(int id, String name, String description, double price, Date dateOfPurcharse, String publicationPlace, int authors, boolean status, int categoryId) {
+    public Book(int id, String name, String description, double price, Date dateOfPurcharse, String publicationPlace, int status) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.dateOfPurcharse = dateOfPurcharse;
         this.publicationPlace = publicationPlace;
-        this.authors = authors;
         this.status = status;
-        this.categoryId = categoryId;
     }
-
+    
+    
     
     
     /**
@@ -125,45 +120,17 @@ public class Book {
     }
 
     /**
-     * @return the authors
-     */
-    public int getAuthors() {
-        return authors;
-    }
-
-    /**
-     * @param authors the authors to set
-     */
-    public void setAuthors(int authors) {
-        this.authors = authors;
-    }
-
-    /**
      * @return the status
      */
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
     /**
      * @param status the status to set
      */
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
-    }
-
-    /**
-     * @return the categoryId
-     */
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    /**
-     * @param categoryId the categoryId to set
-     */
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
     }
     
 }

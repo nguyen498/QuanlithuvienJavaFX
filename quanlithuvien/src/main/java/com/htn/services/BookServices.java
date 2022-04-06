@@ -38,14 +38,14 @@ public class BookServices {
                String name = rs.getString("name");
                String description = rs.getString("description");
                double price = rs.getDouble("price");
-               Date dateOfPurcharse = rs.getDate("date_of_purcharse");
-               String publicationPlace = rs.getString("publication_place");
-               int authors = rs.getInt("authors");
-               boolean status = rs.getBoolean("status");
-               int categoryId = rs.getInt("category_id");
-               books.add(new Book(id,name,description ,price ,dateOfPurcharse,publicationPlace,authors, status,categoryId));
+               Date dateOfPurcharse = rs.getDate("dateOfPurcharse");
+               String publicationPlace = rs.getString("publicationPlace");
+               int status = rs.getInt("status");    
+               books.add(new Book(id,name,description ,price ,dateOfPurcharse,publicationPlace, status));
            }
         return books;
         }
     }
+    
+    
 }
