@@ -67,8 +67,9 @@ CREATE TABLE ReservationTicket (
 CREATE TABLE reservation_detail (
     PRIMARY KEY (bookID, reservationID)
   , dueDate DATETIME NOT NULL
-  , bookID INT NOT NULL REFERENCES DBO.Book(id)
+  , bookID INT NOT NULL
   , reservationID INT NOT NULL
+  , FOREIGN KEY (bookID) REFERENCES Book(id)
   , FOREIGN KEY (reservationID) REFERENCES ReservationTicket(id)
 );
 
@@ -86,8 +87,9 @@ CREATE TABLE lending_detail (
     PRIMARY KEY (bookID, lendingID)
   , dueDate DATETIME NOT NULL
   , ammount FLOAT NOT NULL DEFAULT 0
-  , bookID INT NOT NULL REFERENCES DBO.Book(id)
+  , bookID INT NOT NULL
   , lendingID INT NOT NULL
+  , FOREIGN KEY (bookID) REFERENCES Book(id)
   , FOREIGN KEY (lendingID) REFERENCES LendingTicket(id)
 );
 
