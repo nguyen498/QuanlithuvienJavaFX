@@ -5,6 +5,8 @@
 package com.htn.pojo;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -32,7 +34,25 @@ public class Book {
         this.status = status;
     }
     
+    public Book(String name, String description, double price, Date dateOfPurcharse, String publicationPlace, int status) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.dateOfPurcharse = dateOfPurcharse;
+        this.publicationPlace = publicationPlace;
+        this.status = status;
+    }
     
+    
+    public Book(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
+        this.name = rs.getString("name");
+        this.description = rs.getString("description");
+        this.price = rs.getDouble("price");
+        this.dateOfPurcharse = rs.getDate("dateOfPurcharse");
+        this.publicationPlace = rs.getString("publicationPlace");
+        this.status = rs.getInt("status");
+    }
     
     
     /**

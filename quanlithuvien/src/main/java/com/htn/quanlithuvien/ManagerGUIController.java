@@ -6,7 +6,9 @@ package com.htn.quanlithuvien;
 
 import com.htn.pojo.Book;
 import com.htn.services.BookServices;
+import com.htn.utils.Utils;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -50,11 +53,14 @@ public class ManagerGUIController implements Initializable {
         this.loadColumn();
         this.loadData(null);
         cbStatus.setItems(list);
+        
     }    
     
     private void loadData(String kw) {
         try {
+            // Load Book Data
             this.tbBook.setItems(FXCollections.observableList(s.getBook(kw)));
+            
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,7 +98,38 @@ public class ManagerGUIController implements Initializable {
         this.tbBook.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
      }
     
-     public static void addBook(ActionEvent evt) {
-        
+    public void addBook(ActionEvent evt) throws SQLException {
+        String name = this.txtName.getText();
+        String des = this.txtDescription.getText();
+        Double price = Double.parseDouble(this.txtPrice.getText());
+        Date dateOfPurcharse = (Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText());
+        String publicationPlace = this.txtPublicationPlace.getText();
+        int status = 1;
+        if(cbStatus.getSelectionModel().getSelectedItem().equals("Còn")){
+           status = 1;
+        }
+        else if (cbStatus.getSelectionModel().getSelectedItem().equals("Hết")){
+           status = 0;
+        }
+
+        Book b = new Book (name, des, price, dateOfPurcharse, publicationPlace, status);
+        if (s.addBook(b) == true) {
+            Utils.showBox("Add successful!", Alert.AlertType.INFORMATION).show();
+            this.loadData(null);
+        } else {
+             Utils.showBox("Add failed!", Alert.AlertType.WARNING).show();
+        }
+         
+         
+         
+//        Book book = new Book(
+//            this.txtName.getText()
+//          , this.txtDescription.getText()
+//          , Double.parseDouble(this.txtPrice.getText())
+//          , Utils.toSqlDate(this.txtDateOfPurcharse.getText())
+//          , this.txtPublicationPlace.getText()
+//          , this.cbStatus.getSelectionModel().getSelectedIndex()
+//        );
+//        
     }
 }
