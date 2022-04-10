@@ -49,7 +49,7 @@ public class LoginController implements Initializable {
         }
         else {
             try(Connection conn = JdbcUtils.getConn()){
-                String sql = "SELECT * FROM account WHERE name = ? AND password = ?";
+                String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
                 PreparedStatement stm = conn.prepareStatement(sql);
                 stm.setString(1, txtUsername.getText());
                 stm.setString(2, txtPass.getText());

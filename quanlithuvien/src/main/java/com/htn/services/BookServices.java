@@ -47,5 +47,23 @@ public class BookServices {
         }
     }
     
-    
+    public boolean addBook (Book b) throws SQLException{
+        String sql = "INSERT INTO (name, description, price, dateOfPurcharse, publicationPlace, status) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setString(1, b.getName());
+                stm.setString(2, b.getDescription());
+                stm.setFloat(3,(float) b.getPrice());
+                stm.setDate(4, b.getDateOfPurcharse());
+                stm.setString(5, b.getPublicationPlace());
+                stm.setInt(6, b.getStatus());
+                
+                stm.executeUpdate();
+                
+                conn.commit();
+        }
+        return true;
+    }
 }
+
