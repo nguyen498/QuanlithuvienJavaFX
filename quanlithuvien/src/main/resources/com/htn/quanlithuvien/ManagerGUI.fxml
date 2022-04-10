@@ -62,7 +62,6 @@
                      </GridPane.margin></TextField>
                   <TextField fx:id="txtDescription" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtDateOfPurcharse" maxWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label text="Giá: " GridPane.rowIndex="2">
                      <padding>
                         <Insets left="20.0" />
@@ -88,6 +87,7 @@
                         <Insets left="20.0" />
                      </padding>
                   </Label>
+                  <TextField fx:id="txtDateOfPurcharse" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="1">
@@ -109,7 +109,7 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" text="Thêm" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+                        <Button mnemonicParsing="false" onAction="#addBook" text="Thêm" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
                         <Button mnemonicParsing="false" text="Sửa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
                      </children>
                   </GridPane>
