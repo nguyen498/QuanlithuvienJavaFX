@@ -48,46 +48,56 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="350.4000366210938" minWidth="10.0" prefWidth="233.99999999999997" />
               </columnConstraints>
               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="txtName" GridPane.columnIndex="1">
+                  <TextField fx:id="txtName" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin></TextField>
-                  <TextField fx:id="txtDescription" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label text="Giá: " GridPane.rowIndex="2">
+
+                  <TextField fx:id="txtDescription" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtDateOfPurcharse" maxWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="Giá: " GridPane.rowIndex="3">
                      <padding>
                         <Insets left="20.0" />
                      </padding></Label>
-                  <Label text="Tên sách:  ">
+                  <Label text="Tên sách:  " GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Mô tả: " GridPane.rowIndex="1">
+                  <Label text="Mô tả: " GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin>
                   </Label>
-                  <Label text="Ngày phát hành: " GridPane.rowIndex="3">
+                  <Label text="Ngày phát hành: " GridPane.rowIndex="4">
                      <padding>
                         <Insets left="20.0" />
                      </padding></Label>
-                  <ComboBox fx:id="cbStatus" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <TextField fx:id="txtPublicationPlace" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label text="Nơi phát hành:" GridPane.rowIndex="4">
+                  <ComboBox fx:id="cbStatus" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <TextField fx:id="txtPublicationPlace" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label text="Nơi phát hành:" GridPane.rowIndex="5">
                      <padding>
                         <Insets left="20.0" />
                      </padding>
                   </Label>
-                  <TextField fx:id="txtDateOfPurcharse" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                  <Button mnemonicParsing="false" text="Thêm" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label text="ID:">
+                     <GridPane.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </GridPane.margin></Label>
+                  <TextField fx:id="txtName1" maxWidth="40.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="1">
@@ -109,8 +119,9 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Button mnemonicParsing="false" onAction="#addBook" text="Thêm" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
-                        <Button mnemonicParsing="false" text="Sửa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
+
+                        <Button maxHeight="30.0" maxWidth="70.0" mnemonicParsing="false" text="Sửa" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+                        <Button maxHeight="30.0" maxWidth="70.0" mnemonicParsing="false" text="Xóa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
                      </children>
                   </GridPane>
                   <TextField maxWidth="200.0" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">

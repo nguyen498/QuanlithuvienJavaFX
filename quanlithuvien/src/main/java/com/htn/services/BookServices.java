@@ -52,12 +52,12 @@ public class BookServices {
                 stm.setDate(4, b.getDateOfPurcharse());
                 stm.setString(5, b.getPublicationPlace());
                 stm.setInt(6, b.getStatus());
-
+                
                 stm.executeUpdate();
 
                 conn.commit();
         }
         return true;
     }
-    
 }
+
