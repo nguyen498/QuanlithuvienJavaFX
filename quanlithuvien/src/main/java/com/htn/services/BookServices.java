@@ -24,7 +24,7 @@ public class BookServices {
         try (Connection conn = JdbcUtils.getConn()) {
            String sql = "SELECT * FROM book";
            if (kw != null && !kw.isEmpty())
-               sql += "WHERE name like concat ('%',?,'%')";
+               sql += "WHERE name like concat ('%',?,'%');";
            PreparedStatement stm = conn.prepareStatement(sql);
            if (kw != null && !kw.isEmpty())
                stm.setString(1, kw);
@@ -52,6 +52,40 @@ public class BookServices {
                 stm.setDate(4, b.getDateOfPurcharse());
                 stm.setString(5, b.getPublicationPlace());
                 stm.setInt(6, b.getStatus());
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
+    
+    public boolean updateBook (Book b) throws SQLException{
+        String sql = "UPDATE book SET name = ?, description = ?, price = ?, dateOfPurcharse = ?, publicationPlace = ?, status = ? WHERE id in (?);";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setString(1, b.getName());
+                stm.setString(2, b.getDescription());
+                stm.setFloat(3,(float) b.getPrice());
+                stm.setDate(4, b.getDateOfPurcharse());
+                stm.setString(5, b.getPublicationPlace());
+                stm.setInt(6, b.getStatus());
+                stm.setInt(7, b.getId());
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
+    
+    public boolean deleteBook (int i) throws SQLException{
+        String sql = "DELETE FROM book WHERE id =?";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setString(1, "" + i);
                 
                 stm.executeUpdate();
 

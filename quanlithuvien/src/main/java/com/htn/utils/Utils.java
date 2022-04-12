@@ -36,4 +36,13 @@ public class Utils {
         
         return null;
     }
+    
+    public static String xuatNgayThangNam(java.sql.Date ntn) {
+        if (ntn != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+            return formatter.format(ntn);
+        }else
+            return "n/a";
+    }
 }
