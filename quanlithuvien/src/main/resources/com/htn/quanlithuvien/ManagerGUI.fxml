@@ -108,7 +108,7 @@
                      <GridPane.margin>
                         <Insets left="20.0" right="20.0" />
                      </GridPane.margin></Label>
-                  <TextField fx:id="txtId" maxWidth="40.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtId" disable="true" maxWidth="40.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>
             <GridPane GridPane.columnIndex="1">
