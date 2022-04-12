@@ -24,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 
 /**
  * FXML Controller class
@@ -38,6 +39,7 @@ public class ManagerGUIController implements Initializable {
      */
     
     @FXML private TableView <Book> tbBook;
+    @FXML private TextField txtId;
     @FXML private TextField txtName;
     @FXML private TextField txtDescription;
     @FXML private TextField txtPrice;
@@ -119,17 +121,61 @@ public class ManagerGUIController implements Initializable {
         } else {
              Utils.showBox("Add failed!", Alert.AlertType.WARNING).show();
         }
-         
-         
-         
-//        Book book = new Book(
-//            this.txtName.getText()
-//          , this.txtDescription.getText()
-//          , Double.parseDouble(this.txtPrice.getText())
-//          , Utils.toSqlDate(this.txtDateOfPurcharse.getText())
-//          , this.txtPublicationPlace.getText()
-//          , this.cbStatus.getSelectionModel().getSelectedIndex()
-//        );
-//        
+    }
+    
+    public void bindingBook (MouseEvent evt){
+        Book b = tbBook.getSelectionModel().getSelectedItem();  
+        txtId.setText("" + b.getId());
+        txtName.setText(b.getName());
+        txtDescription.setText(b.getDescription());
+        txtPrice.setText("" + b.getPrice());
+        txtDateOfPurcharse.setText("" + Utils.xuatNgayThangNam(b.getDateOfPurcharse()));
+        txtPublicationPlace.setText(b.getPublicationPlace());
+        if(b.getStatus() == 0){
+            cbStatus.setValue("Hết");
+        }
+        else if(b.getStatus() == 1){
+            cbStatus.setValue("Còn");
+        }
+    }
+    
+    public void updateBook(ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtId.getText());
+        String name = this.txtName.getText();
+        String des = this.txtDescription.getText();
+        Double price = Double.parseDouble(this.txtPrice.getText());
+        Date dateOfPurcharse = (Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText());
+        String publicationPlace = this.txtPublicationPlace.getText();
+        int status = 1;
+        if(cbStatus.getSelectionModel().getSelectedItem().equals("Còn")){
+           status = 1;
+        }
+        else if (cbStatus.getSelectionModel().getSelectedItem().equals("Hết")){
+           status = 0;
+        }
+
+        Book b = new Book (id, name, des, price, dateOfPurcharse, publicationPlace, status);
+        if (s.updateBook(b) == true) {
+            Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
+            this.loadData(null);
+        } else {
+             Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void deleteBook (ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtId.getText());
+        if (s.deleteBook(id) == true) {
+            Utils.showBox("Delete successful!", Alert.AlertType.INFORMATION).show();
+            txtId.setText("");
+            txtName.setText("");
+            txtDescription.setText("");
+            txtPrice.setText("" );
+            txtDateOfPurcharse.setText("");
+            txtPublicationPlace.setText("");
+            this.loadData(null);
+        } else {
+             Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
+        }
     }
 }
