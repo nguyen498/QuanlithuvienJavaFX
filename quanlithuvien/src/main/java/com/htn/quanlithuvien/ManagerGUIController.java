@@ -6,6 +6,7 @@ package com.htn.quanlithuvien;
 
 import com.htn.pojo.Account;
 import com.htn.pojo.Book;
+import com.htn.services.AccountServices;
 import com.htn.services.BookServices;
 import com.htn.utils.Utils;
 import java.net.URL;
@@ -35,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 
 public class ManagerGUIController implements Initializable {
     private static final BookServices s = new BookServices();
+    private static final AccountServices a = new AccountServices();
     /**
      * Initializes the controller class.
      */
@@ -54,12 +56,22 @@ public class ManagerGUIController implements Initializable {
     
     //region attribute account
     @FXML private TableView <Account> tbAccount;
+    @FXML private TextField txtIdAccount;
+    @FXML private TextField txtNameAccount;
+    @FXML private TextField txtUsername;
+    @FXML private TextField txtPassword;
+    @FXML private TextField txtbirthdate;
+    @FXML private TextField txtKeywordAccount;
+    @FXML private ComboBox <String> cbGender;
+    
+    ObservableList<String> listGender = FXCollections.observableArrayList("Nam", "Nữ", "Khác");
     //endregion
     
     //Region book manager
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        //book
         this.loadColumnBook();
         this.loadDataBook(null);
         cbStatus.setItems(list);
@@ -67,6 +79,23 @@ public class ManagerGUIController implements Initializable {
         this.txtKeyWord.textProperty().addListener((evt) ->{
             this.loadDataBook(this.txtKeyWord.getText());
         });
+        
+        //book
+        this.loadColumnAccount();
+        try {
+            this.loadDataAccount(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        cbGender.setItems(listGender);
+        this.txtKeywordAccount.textProperty().addListener((evt) ->{
+            try {
+                this.loadDataAccount(this.txtKeywordAccount.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+        
     }    
     
     private void loadDataBook(String kw) {
@@ -191,8 +220,80 @@ public class ManagerGUIController implements Initializable {
     //endregion
     
     //Region account manager
-    private void loadDataAccount (String kw){
+    private void loadDataAccount (String kw) throws SQLException{
+        this.tbAccount.setItems(FXCollections.observableList(a.getAccount(kw)));
+    }
+    
+    private void loadColumnAccount (){
+        TableColumn col1 = new TableColumn("Id");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
         
+        TableColumn col2 = new TableColumn("Name");
+        col2.setCellValueFactory(new PropertyValueFactory("name"));
+        col2.setPrefWidth(100);
+        
+        TableColumn col3 = new TableColumn("Password");
+        col3.setCellValueFactory(new PropertyValueFactory("password"));
+        col3.setPrefWidth(100);
+        
+        TableColumn col4 = new TableColumn("Username");
+        col4.setCellValueFactory(new PropertyValueFactory("username"));
+        col4.setPrefWidth(100);
+        
+        TableColumn col5 = new TableColumn("Gender");
+        col5.setCellValueFactory(new PropertyValueFactory("gender"));
+        col5.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("Birthday");
+        col6.setCellValueFactory(new PropertyValueFactory("birthday"));
+        col6.setPrefWidth(100);
+        
+        this.tbAccount.getColumns().addAll(col1, col2, col3, col4, col5, col6);
+    }
+    
+    public void bindingAccount (MouseEvent evt){
+        Account a = tbAccount.getSelectionModel().getSelectedItem();  
+        
+        txtIdAccount.setText("" + a.getId());
+        txtNameAccount.setText("" + a.getName());
+        txtUsername.setText("" + a.getUsername());
+        txtPassword.setText("" + a.getPassword());
+        txtbirthdate.setText("" + Utils.xuatNgayThangNam(a.getBirthday()));
+        cbGender.setValue("" + a.getGender());
+    }
+    
+    public void updateAccount (ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtIdAccount.getText());
+        String name = this.txtNameAccount.getText();
+        String pass = this.txtPassword.getText();
+        String username = this.txtUsername.getText();
+        String gender = cbGender.getSelectionModel().getSelectedItem();
+        Date birthdate = (Date) Utils.toSqlDate(this.txtbirthdate.getText());
+
+        Account acc = new Account (id, name, pass, username, gender, birthdate, 0);
+        if (a.updateAccount(acc) == true) {
+            Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
+            this.loadDataAccount(null);
+        } else {
+             Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void deleteAccount (ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtIdAccount.getText());
+        if (a.deleteAccount(id) == true) {
+            Utils.showBox("Delete successful!", Alert.AlertType.INFORMATION).show();
+            txtIdAccount.setText("");
+            txtNameAccount.setText("");
+            txtPassword.setText("");
+            txtUsername.setText("" );
+            txtbirthdate.setText("");
+            cbGender.setValue("");
+            this.loadDataAccount(null);
+        } else {
+             Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
+        }
     }
     //endregion
 }

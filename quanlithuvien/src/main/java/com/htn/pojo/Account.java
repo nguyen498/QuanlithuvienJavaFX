@@ -6,6 +6,7 @@ package com.htn.pojo;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -40,6 +41,16 @@ public class Account {
         this.gender = gender;
         this.birthday = birthday;
         this.type = type;
+    }
+    
+    public Account(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
+        this.name = rs.getString("name");
+        this.password = rs.getString("password");
+        this.username = rs.getString("username");
+        this.gender = rs.getString("gender");
+        this.birthday = rs.getDate("birthdate");
+        this.type = rs.getInt("accountType");
     }
 
     /**

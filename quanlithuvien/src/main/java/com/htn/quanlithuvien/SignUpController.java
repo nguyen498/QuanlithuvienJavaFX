@@ -38,6 +38,7 @@ public class SignUpController implements Initializable {
     @FXML private TextField txtConfirm;
     @FXML private TextField txtBirthday;
     @FXML private ComboBox<String> cbGender;
+   
     
     ObservableList<String> list = FXCollections.observableArrayList("Nam", "Nữ", "Khác");
     
@@ -45,11 +46,12 @@ public class SignUpController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         cbGender.setItems(list);
+        cbGender.setValue(list.get(0));
     }
 
     public void register (ActionEvent evt) throws SQLException{
        
-        Account a = new Account(txtName.getText(), txtUsername.getText(), txtPass.getText(), cbGender.getValue() ,(Date) Utils.toSqlDate(txtBirthday.getText()), 0);
+        Account a = new Account(txtName.getText(), txtUsername.getText(), txtPass.getText(), cbGender.getSelectionModel().getSelectedItem() ,(Date) Utils.toSqlDate(txtBirthday.getText()), 0);
         if(txtName.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter name!", Alert.AlertType.WARNING).show();
         }
