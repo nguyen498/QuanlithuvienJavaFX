@@ -5,6 +5,7 @@
 package com.htn.pojo;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 
 /**
  *
@@ -22,11 +23,11 @@ public class Account {
     public Account() {
     }
 
-    public Account(int id, String name, String username, String password, String gender, Date birthday, int type) {
+    public Account(int id, String name, String password, String username, String gender, Date birthday, int type) {
         this.id = id;
         this.name = name;
-        this.username = username;
         this.password = password;
+        this.username = username;
         this.gender = gender;
         this.birthday = birthday;
         this.type = type;

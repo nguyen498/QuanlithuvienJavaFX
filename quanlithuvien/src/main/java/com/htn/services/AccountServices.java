@@ -8,13 +8,38 @@ import com.htn.pojo.Account;
 import com.htn.utils.JdbcUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author admin
  */
+
 public class AccountServices {
+    public List<Account> getAccount (String kw) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM account WHERE name like concat ('%',?,'%');";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            if (kw == null)
+                kw = "";
+            
+            stm.setString(1, kw);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<Account> accounts = new ArrayList<>();
+
+            while (rs.next()) {
+                //Account account = new Account(rs);
+                //accounts.add(account);
+            }
+         return accounts;
+         }
+    }
+    
     public boolean addAccount (Account a) throws SQLException{
         String sql = "INSERT INTO account (name,username, password, gender, birthdate, accountType) " + "VALUES (?, ?, ?, ?, ?, ?)";
             try (Connection conn = JdbcUtils.getConn()) {
