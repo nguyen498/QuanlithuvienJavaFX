@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import javafx.scene.control.Button;
 
 /**
  * JavaFX App
@@ -21,7 +20,6 @@ public class App extends Application {
         scene = new Scene(loadFXML("Login"), 500, 200   );
         stage.setScene(scene);
         stage.show();
-        Button btnLogin = new Button();
     }
 
     static void setRoot(String fxml) throws IOException {

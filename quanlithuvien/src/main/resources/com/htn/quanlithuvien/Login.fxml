@@ -26,13 +26,13 @@
    <children>
       <Label text="Tài khoản: " GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
       <Label text="Mật khẩu: " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-      <TextField fx:id="txtUsername" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField fx:id="txtUsername" prefHeight="26.0" prefWidth="190.0" text="admin" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Đăng nhập" textAlignment="CENTER" GridPane.columnSpan="3" GridPane.halignment="CENTER">
          <font>
             <Font size="39.0" />
          </font>
       </Text>
-      <PasswordField fx:id="txtPass" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <PasswordField fx:id="txtPass" text="123" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Button fx:id="btnLogin" contentDisplay="CENTER" maxHeight="40.0" maxWidth="100.0" mnemonicParsing="false" onAction="#loginHandle" text="Đăng nhập" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets right="20.0" />

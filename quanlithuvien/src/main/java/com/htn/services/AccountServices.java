@@ -33,24 +33,58 @@ public class AccountServices {
             List<Account> accounts = new ArrayList<>();
 
             while (rs.next()) {
-                //Account account = new Account(rs);
-                //accounts.add(account);
+                Account account = new Account(rs);
+                accounts.add(account);
             }
          return accounts;
          }
     }
     
-    public boolean addAccount (Account a) throws SQLException{
-        String sql = "INSERT INTO account (name,username, password, gender, birthdate, accountType) " + "VALUES (?, ?, ?, ?, ?, ?)";
-            try (Connection conn = JdbcUtils.getConn()) {
+    public boolean updateAccount (Account a) throws SQLException{
+        String sql = "UPDATE account SET name = ?, password = ?, username = ?, gender = ?, birthdate = ? WHERE id in (?);";
+        try (Connection conn = JdbcUtils.getConn()) {
                 conn.setAutoCommit(false);
                 PreparedStatement stm = conn.prepareStatement(sql);
                 stm.setString(1, a.getName());
-                stm.setString(2, a.getUsername());
-                stm.setString(3, a.getPassword());
+                stm.setString(2, a.getPassword());
+                stm.setString(3, a.getUsername());
                 stm.setString(4, a.getGender());
                 stm.setDate(5, a.getBirthday());
-                stm.setInt(6, a.getType());
+                stm.setInt(6, a.getId());
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        
+        return true;
+    }
+    
+    public boolean addAccount (Account a) throws SQLException{
+        String sql = "INSERT INTO account (name, username, password, gender, birthdate, accountType) " + "VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = JdbcUtils.getConn()) {
+            conn.setAutoCommit(false);
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setString(1, a.getName());
+            stm.setString(2, a.getUsername());
+            stm.setString(3, a.getPassword());
+            stm.setString(4, a.getGender());
+            stm.setDate(5, a.getBirthday());
+            stm.setInt(6, a.getType());
+
+            stm.executeUpdate();
+
+            conn.commit();
+        }
+        return true;
+    }
+    
+    public boolean deleteAccount (int i) throws SQLException{
+        String sql = "DELETE FROM account WHERE id =?";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setString(1, "" + i);
                 
                 stm.executeUpdate();
 

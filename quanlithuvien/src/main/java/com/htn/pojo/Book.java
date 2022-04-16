@@ -54,7 +54,6 @@ public class Book {
         this.status = rs.getInt("status");
     }
     
-    
     /**
      * @return the id
      */
