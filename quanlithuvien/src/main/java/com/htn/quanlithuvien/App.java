@@ -22,7 +22,6 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         Button btnLogin = new Button();
-        
     }
 
     static void setRoot(String fxml) throws IOException {

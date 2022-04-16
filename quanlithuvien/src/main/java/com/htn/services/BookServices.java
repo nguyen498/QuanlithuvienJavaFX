@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import com.htn.utils.JdbcUtils;
-import java.sql.Date;
 
 /**
  *
@@ -22,23 +21,23 @@ public class BookServices {
     public List<Book> getBook (String kw) throws SQLException{
     
         try (Connection conn = JdbcUtils.getConn()) {
-           String sql = "SELECT * FROM book";
-           if (kw != null && !kw.isEmpty())
-               sql += "WHERE name like concat ('%',?,'%');";
-           PreparedStatement stm = conn.prepareStatement(sql);
-           if (kw != null && !kw.isEmpty())
-               stm.setString(1, kw);
-           
-           ResultSet rs = stm.executeQuery();
-           
-           List<Book> books = new ArrayList<>();
-           
-           while (rs.next()) {
-               Book book = new Book(rs);
-               books.add(book);
-           }
-        return books;
-        }
+            String sql = "SELECT * FROM book WHERE name like concat ('%',?,'%');";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            if (kw == null)
+                kw = "";
+            
+            stm.setString(1, kw);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<Book> books = new ArrayList<>();
+
+            while (rs.next()) {
+                Book book = new Book(rs);
+                books.add(book);
+            }
+         return books;
+         }
     }
     
     public boolean addBook (Book b) throws SQLException{

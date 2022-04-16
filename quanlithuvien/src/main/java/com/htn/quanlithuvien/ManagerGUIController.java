@@ -4,6 +4,7 @@
  */
 package com.htn.quanlithuvien;
 
+import com.htn.pojo.Account;
 import com.htn.pojo.Book;
 import com.htn.services.BookServices;
 import com.htn.utils.Utils;
@@ -37,7 +38,7 @@ public class ManagerGUIController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    
+    //region attribute book
     @FXML private TableView <Book> tbBook;
     @FXML private TextField txtId;
     @FXML private TextField txtName;
@@ -45,30 +46,39 @@ public class ManagerGUIController implements Initializable {
     @FXML private TextField txtPrice;
     @FXML private TextField txtDateOfPurcharse;
     @FXML private TextField txtPublicationPlace;
+    @FXML private TextField txtKeyWord;
     @FXML private ComboBox <String> cbStatus;
     
     ObservableList<String> list = FXCollections.observableArrayList("Còn", "Hết");
+    //endregion
     
+    //region attribute account
+    @FXML private TableView <Account> tbAccount;
+    //endregion
+    
+    //Region book manager
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        this.loadColumn();
-        this.loadData(null);
+        this.loadColumnBook();
+        this.loadDataBook(null);
         cbStatus.setItems(list);
         
+        this.txtKeyWord.textProperty().addListener((evt) ->{
+            this.loadDataBook(this.txtKeyWord.getText());
+        });
     }    
     
-    private void loadData(String kw) {
+    private void loadDataBook(String kw) {
         try {
             // Load Book Data
             this.tbBook.setItems(FXCollections.observableList(s.getBook(kw)));
-            
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
      
-     private void loadColumn (){
+    private void loadColumnBook (){
         TableColumn col1 = new TableColumn("Id");
         col1.setCellValueFactory(new PropertyValueFactory("id"));
         col1.setPrefWidth(50);
@@ -117,7 +127,7 @@ public class ManagerGUIController implements Initializable {
         Book b = new Book (name, des, price, dateOfPurcharse, publicationPlace, status);
         if (s.addBook(b) == true) {
             Utils.showBox("Add successful!", Alert.AlertType.INFORMATION).show();
-            this.loadData(null);
+            this.loadDataBook(null);
         } else {
              Utils.showBox("Add failed!", Alert.AlertType.WARNING).show();
         }
@@ -157,7 +167,7 @@ public class ManagerGUIController implements Initializable {
         Book b = new Book (id, name, des, price, dateOfPurcharse, publicationPlace, status);
         if (s.updateBook(b) == true) {
             Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
-            this.loadData(null);
+            this.loadDataBook(null);
         } else {
              Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
         }
@@ -173,9 +183,16 @@ public class ManagerGUIController implements Initializable {
             txtPrice.setText("" );
             txtDateOfPurcharse.setText("");
             txtPublicationPlace.setText("");
-            this.loadData(null);
+            this.loadDataBook(null);
         } else {
              Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
         }
     }
+    //endregion
+    
+    //Region account manager
+    private void loadDataAccount (String kw){
+        
+    }
+    //endregion
 }
