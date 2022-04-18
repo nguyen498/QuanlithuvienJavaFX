@@ -80,12 +80,14 @@ public class ManagerGUIController implements Initializable {
     @FXML private TableView <Category> tbCategories;
     @FXML private TextField txtCategory;
     @FXML private TextField txtIdCategory;
+    @FXML private TextField txtKeywordCategory;
     //endregion
     
     //region attribute authors
     @FXML private TableView <Author> tbAuthors;
     @FXML private TextField txtAuthor;
     @FXML private TextField txtIdAuthor;
+    @FXML private TextField txtKeywordAuthor;
     //endregion
     
     //Region book manager
@@ -124,6 +126,13 @@ public class ManagerGUIController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.txtKeywordCategory.textProperty().addListener((evt) -> {
+            try {
+                this.loadDataCategory(this.txtKeywordCategory.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
         
         this.loadColumnAuthors();
         try {
@@ -131,6 +140,13 @@ public class ManagerGUIController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.txtKeywordAuthor.textProperty().addListener((evt) -> {
+            try {
+                this.loadDataAuthors(this.txtKeywordAuthor.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }    
     
     private void loadDataBook(String kw) {

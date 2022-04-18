@@ -334,7 +334,7 @@
                                     <Insets left="150.0" right="150.0" />
                                  </GridPane.margin>
                               </GridPane>
-                              <TextField maxWidth="200.0" promptText="Tìm kiếm...." GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                              <TextField fx:id="txtKeywordCategory" maxWidth="200.0" promptText="Tìm kiếm...." GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
                                  <GridPane.margin>
                                     <Insets right="10.0" top="10.0" />
                                  </GridPane.margin>
@@ -422,7 +422,7 @@
                                     <Insets left="150.0" right="150.0" />
                                  </GridPane.margin>
                               </GridPane>
-                              <TextField maxWidth="200.0" promptText="Tìm kiếm...." GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                              <TextField fx:id="txtKeywordAuthor" maxWidth="200.0" promptText="Tìm kiếm...." GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
                                  <GridPane.margin>
                                     <Insets right="10.0" top="10.0" />
                                  </GridPane.margin>
