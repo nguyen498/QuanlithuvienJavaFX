@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.htn.quanlithuvien.ManagerGUIController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="549.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.htn.quanlithuvien.ManagerGUIController">
    <children>
       <MenuBar>
         <menus>
@@ -29,7 +29,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane prefHeight="499.0" prefWidth="671.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="517.0" prefWidth="671.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Sách">
             <content>
@@ -412,7 +412,7 @@
                                           <Insets />
                                        </GridPane.margin>
                                     </Button>
-                                    <Button mnemonicParsing="false" text="Sửa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                                    <Button mnemonicParsing="false" onAction="#updateAuthor" text="Sửa" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                                        <GridPane.margin>
                                           <Insets />
                                        </GridPane.margin>
