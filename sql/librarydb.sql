@@ -31,7 +31,7 @@ CREATE TABLE `account` (
   `birthdate` datetime NOT NULL,
   `accountType` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'Hà Trường Nguyên','123456','nguyen498','nam','2001-05-20 00:00:00',0);
+INSERT INTO `account` VALUES (1,'Hà Trường Nguyên','123456','nguyen498','Nam','2001-05-20 00:00:00',0),(3,'admin','123','admin','Nam','2001-05-20 00:00:00',0);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -109,7 +109,7 @@ CREATE TABLE `book` (
   `publicationPlace` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-04-05 00:00:00','HCM',1);
+INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',1);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -349,4 +349,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-11 21:36:41
+-- Dump completed on 2022-04-17 14:39:32

@@ -4,6 +4,8 @@
  */
 package com.htn.quanlithuvien;
 
+import com.htn.pojo.Account;
+import com.htn.pojo.AccountType;
 import com.htn.utils.JdbcUtils;
 import com.htn.utils.Utils;
 import java.io.IOException;
@@ -12,6 +14,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -49,28 +53,43 @@ public class LoginController implements Initializable {
         }
         else {
             try(Connection conn = JdbcUtils.getConn()){
+                
                 String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
                 PreparedStatement stm = conn.prepareStatement(sql);
                 stm.setString(1, txtUsername.getText());
                 stm.setString(2, txtPass.getText());
                 
                 ResultSet rs = stm.executeQuery();
-                if(rs.next()){
-                    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ManagerGUI.fxml"));
-        
-                    Scene scene = new Scene(fxmlLoader.load());
-                    Stage stage = new Stage ();
-                    stage.setScene(scene);
-                    stage.setTitle("Manager");
-                    stage.show();
-                }
-                else{
+
+                if (rs.next()) {
+                    Account account = new Account(rs);
+                    // Is Admin
+                    int accountType = account.getType();
+                    if (accountType == AccountType.ADMIN.toInt()) 
+                        showClientUI();
+                    // Is User
+                    else if (accountType == AccountType.STUDENT.toInt())
+                        Utils.showBox("Bạn không đủ quyền truy cập!", Alert.AlertType.ERROR).show();
+                    
+                } else {
                     Utils.showBox("Đăng nhập thất bại!", Alert.AlertType.ERROR).show();
                 }
+                        
+                
             }
         }
         
     }
+    
+     public void showClientUI () throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ClientUI.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage ();
+        stage.setScene(scene);
+        stage.setTitle("Quản Lý Mượn Trả");
+        stage.show();
+    }
+    
     
     public void signUpHandle (ActionEvent evt) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("SignUp.fxml"));

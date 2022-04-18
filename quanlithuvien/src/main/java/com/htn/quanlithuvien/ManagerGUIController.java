@@ -5,6 +5,7 @@
 package com.htn.quanlithuvien;
 
 import com.htn.pojo.Account;
+import com.htn.pojo.AccountType;
 import com.htn.pojo.Book;
 import com.htn.services.AccountServices;
 import com.htn.services.BookServices;
@@ -63,31 +64,34 @@ public class ManagerGUIController implements Initializable {
     @FXML private TextField txtbirthdate;
     @FXML private TextField txtKeywordAccount;
     @FXML private ComboBox <String> cbGender;
+    @FXML private ComboBox <String> cbAccountType;
     
     ObservableList<String> listGender = FXCollections.observableArrayList("Nam", "Nữ", "Khác");
+    ObservableList<String> listAccountType = FXCollections.observableArrayList("Admin", "Student");
     //endregion
     
     //Region book manager
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        //book
+        // Book
         this.loadColumnBook();
         this.loadDataBook(null);
         cbStatus.setItems(list);
+        cbGender.setItems(listGender);
+        cbAccountType.setItems(listAccountType);
         
         this.txtKeyWord.textProperty().addListener((evt) ->{
             this.loadDataBook(this.txtKeyWord.getText());
         });
         
-        //book
+        // Account
         this.loadColumnAccount();
         try {
             this.loadDataAccount(null);
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        cbGender.setItems(listGender);
+        
         this.txtKeywordAccount.textProperty().addListener((evt) ->{
             try {
                 this.loadDataAccount(this.txtKeywordAccount.getText());
@@ -222,6 +226,7 @@ public class ManagerGUIController implements Initializable {
     //Region account manager
     private void loadDataAccount (String kw) throws SQLException{
         this.tbAccount.setItems(FXCollections.observableList(a.getAccount(kw)));
+        
     }
     
     private void loadColumnAccount (){
@@ -249,7 +254,11 @@ public class ManagerGUIController implements Initializable {
         col6.setCellValueFactory(new PropertyValueFactory("birthday"));
         col6.setPrefWidth(100);
         
-        this.tbAccount.getColumns().addAll(col1, col2, col3, col4, col5, col6);
+        TableColumn col7 = new TableColumn("Type");
+        col6.setCellValueFactory(new PropertyValueFactory("type"));
+        col6.setPrefWidth(100);
+        
+        this.tbAccount.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
     }
     
     public void bindingAccount (MouseEvent evt){
@@ -261,6 +270,36 @@ public class ManagerGUIController implements Initializable {
         txtPassword.setText("" + a.getPassword());
         txtbirthdate.setText("" + Utils.xuatNgayThangNam(a.getBirthday()));
         cbGender.setValue("" + a.getGender());
+        if(a.getType()== AccountType.ADMIN.toInt()){
+            cbAccountType.setValue("Admin");
+        }
+        else if(a.getType() == AccountType.STUDENT.toInt()){
+            cbAccountType.setValue("Student");
+        }
+    }
+    
+    public void addAccount(ActionEvent evt) throws SQLException {
+        int type = 1;
+        int id = Integer.parseInt(this.txtIdAccount.getText());
+        String name = this.txtNameAccount.getText();
+        String pass = this.txtPassword.getText();
+        String username = this.txtUsername.getText();
+        String gender = cbGender.getSelectionModel().getSelectedItem();
+        Date birthdate = (Date) Utils.toSqlDate(this.txtbirthdate.getText());
+        if(cbAccountType.getSelectionModel().getSelectedItem().equals("Admin")){
+           type = 0;
+        }
+        else if (cbAccountType.getSelectionModel().getSelectedItem().equals("Student")){
+           type = 1;
+        }
+        
+        Account acc = new Account (id, name, pass, username, gender, birthdate, type);
+        if (a.addAccount(acc) == true) {
+            Utils.showBox("Add account successfully!", Alert.AlertType.INFORMATION).show();
+            this.loadDataAccount(null);
+        } else {
+             Utils.showBox("Add account failed", Alert.AlertType.WARNING).show();
+        }
     }
     
     public void updateAccount (ActionEvent evt) throws SQLException{
