@@ -6,9 +6,13 @@ package com.htn.quanlithuvien;
 
 import com.htn.pojo.Account;
 import com.htn.pojo.AccountType;
+import com.htn.pojo.Author;
 import com.htn.pojo.Book;
+import com.htn.pojo.Category;
 import com.htn.services.AccountServices;
+import com.htn.services.AuthorServices;
 import com.htn.services.BookServices;
+import com.htn.services.CategoryServices;
 import com.htn.utils.Utils;
 import java.net.URL;
 import java.sql.Date;
@@ -38,6 +42,8 @@ import javafx.scene.input.MouseEvent;
 public class ManagerGUIController implements Initializable {
     private static final BookServices s = new BookServices();
     private static final AccountServices a = new AccountServices();
+    private static final CategoryServices c = new CategoryServices();
+    private static final AuthorServices au = new AuthorServices();
     /**
      * Initializes the controller class.
      */
@@ -70,6 +76,18 @@ public class ManagerGUIController implements Initializable {
     ObservableList<String> listAccountType = FXCollections.observableArrayList("Admin", "Student");
     //endregion
     
+    //region attribute category
+    @FXML private TableView <Category> tbCategories;
+    @FXML private TextField txtCategory;
+    @FXML private TextField txtIdCategory;
+    //endregion
+    
+    //region attribute authors
+    @FXML private TableView <Author> tbAuthors;
+    @FXML private TextField txtAuthor;
+    @FXML private TextField txtIdAuthor;
+    //endregion
+    
     //Region book manager
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,6 +118,19 @@ public class ManagerGUIController implements Initializable {
             }
         });
         
+        this.loadColumnCategory();
+        try {
+            this.loadDataCategory(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.loadColumnAuthors();
+        try {
+            this.loadDataAuthors(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
     private void loadDataBook(String kw) {
@@ -225,8 +256,7 @@ public class ManagerGUIController implements Initializable {
     
     //Region account manager
     private void loadDataAccount (String kw) throws SQLException{
-        this.tbAccount.setItems(FXCollections.observableList(a.getAccount(kw)));
-        
+        this.tbAccount.setItems(FXCollections.observableList(a.getAccount(kw)));  
     }
     
     private void loadColumnAccount (){
@@ -330,6 +360,124 @@ public class ManagerGUIController implements Initializable {
             txtbirthdate.setText("");
             cbGender.setValue("");
             this.loadDataAccount(null);
+        } else {
+             Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    //endregion
+    
+    //region category manager
+    private void loadDataCategory (String kw) throws SQLException{
+        this.tbCategories.setItems(FXCollections.observableList(c.getCategory(kw)));  
+    }
+    
+    private void loadColumnCategory (){
+        TableColumn col1 = new TableColumn("Id");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("Name");
+        col2.setCellValueFactory(new PropertyValueFactory("name"));
+        col2.setPrefWidth(200);
+        
+        this.tbCategories.getColumns().addAll(col1, col2);
+    }
+    
+    public void addCategory (ActionEvent evt) throws SQLException{
+        Category cate = new Category(txtCategory.getText());
+        
+        if (c.addCategory(cate) == true) {
+            Utils.showBox("Add category successful!", Alert.AlertType.INFORMATION).show();
+            this.loadDataCategory(null);
+        } else {
+             Utils.showBox("Add category failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void bindingCategory (MouseEvent evt){
+        Category cates = tbCategories.getSelectionModel().getSelectedItem();  
+        
+        txtIdCategory.setText("" + cates.getId());
+        txtCategory.setText("" + cates.getName());
+    }
+    
+    public void updateCategory (ActionEvent evt) throws SQLException{
+        Category cate = new Category( Integer.parseInt(txtIdCategory.getText()),txtCategory.getText());
+        
+        if (c.updateCategory(cate) == true) {
+            Utils.showBox("update category successful!", Alert.AlertType.INFORMATION).show();
+            this.loadDataCategory(null);
+        } else {
+             Utils.showBox("update category failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void deleteCategory (ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtIdCategory.getText());
+        if (c.deleteCategory(id) == true) {
+            Utils.showBox("Delete successful!", Alert.AlertType.INFORMATION).show();
+            txtIdCategory.setText("");
+            txtCategory.setText("");
+            this.loadDataCategory(null);
+        } else {
+             Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    //endregion
+    
+    //region authors manager
+    private void loadDataAuthors (String kw) throws SQLException{
+        this.tbAuthors.setItems(FXCollections.observableList(au.getAuthor(kw)));  
+    }
+    
+    private void loadColumnAuthors (){
+        TableColumn col1 = new TableColumn("Id");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("Name");
+        col2.setCellValueFactory(new PropertyValueFactory("name"));
+        col2.setPrefWidth(200);
+        
+        this.tbAuthors.getColumns().addAll(col1, col2);
+    }
+    
+    public void addAuthor (ActionEvent evt) throws SQLException{
+        Author author = new Author(txtAuthor.getText());
+        
+        if (au.addAuthor(author) == true) {
+            Utils.showBox("Add author successful!", Alert.AlertType.INFORMATION).show();
+            this.loadDataAuthors(null);
+        } else {
+             Utils.showBox("Add author failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void bindingAuthor (MouseEvent evt){
+        Author authors = tbAuthors.getSelectionModel().getSelectedItem();  
+        
+        txtIdAuthor.setText("" + authors.getId());
+        txtAuthor.setText("" + authors.getName());
+    }
+    
+    public void updateAuthor (ActionEvent evt) throws SQLException{
+        Author author = new Author( Integer.parseInt(txtIdAuthor.getText()),txtAuthor.getText());
+        
+        if (au.updateAuthor(author) == true) {
+            Utils.showBox("update author successful!", Alert.AlertType.INFORMATION).show();
+            this.loadDataAuthors(null);
+        } else {
+             Utils.showBox("update author failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void deleteAuthor(ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtIdAuthor.getText());
+        if (au.deleteAuthor(id) == true) {
+            Utils.showBox("Delete successful!", Alert.AlertType.INFORMATION).show();
+            txtIdAuthor.setText("");
+            txtAuthor.setText("");
+            this.loadDataAuthors(null);
         } else {
              Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
         }
