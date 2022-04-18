@@ -19,28 +19,28 @@ public class Account {
     private String password;
     private String gender;
     private Date birthday;
-    private int type;
+    private int accountType;
 
     public Account() {
     }
 
-    public Account(int id, String name, String password, String username, String gender, Date birthday, int type) {
+    public Account(int id, String name, String password, String username, String gender, Date birthday, int accountType) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.username = username;
         this.gender = gender;
         this.birthday = birthday;
-        this.type = type;
+        this.accountType = accountType;
     }
     
-    public Account(String name, String username, String password, String gender, Date birthday, int type) {
+    public Account(String name, String username, String password, String gender, Date birthday, int accountType) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.gender = gender;
         this.birthday = birthday;
-        this.type = type;
+        this.accountType = accountType;
     }
     
     public Account(ResultSet rs) throws SQLException {
@@ -50,7 +50,7 @@ public class Account {
         this.username = rs.getString("username");
         this.gender = rs.getString("gender");
         this.birthday = rs.getDate("birthdate");
-        this.type = rs.getInt("accountType");
+        this.accountType = rs.getInt("accountType");
     }
 
     /**
@@ -138,17 +138,17 @@ public class Account {
     }
 
     /**
-     * @return the type
+     * @return the accountType
      */
     public int getType() {
-        return type;
+        return accountType;
     }
 
     /**
-     * @param type the type to set
+     * @param accountType the accountType to set
      */
-    public void setType(int type) {
-        this.type = type;
+    public void setType(int accountType) {
+        this.accountType = accountType;
     }
     
 }
