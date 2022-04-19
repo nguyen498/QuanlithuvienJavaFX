@@ -51,7 +51,7 @@ public class SignUpController implements Initializable {
 
     public void register (ActionEvent evt) throws SQLException{
        
-        Account a = new Account(txtName.getText(), txtUsername.getText(), txtPass.getText(), cbGender.getSelectionModel().getSelectedItem() ,(Date) Utils.toSqlDate(txtBirthday.getText()), 0);
+        Account a = new Account(txtName.getText(), txtUsername.getText(), txtPass.getText(), cbGender.getSelectionModel().getSelectedItem() ,(Date) Utils.toSqlDate(txtBirthday.getText()), 1);
         if(txtName.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter name!", Alert.AlertType.WARNING).show();
         }
