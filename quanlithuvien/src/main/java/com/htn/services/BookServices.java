@@ -40,6 +40,25 @@ public class BookServices {
          }
     }
     
+    
+    public Book getBookByID (int id) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM book WHERE id = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                Book book = new Book(rs);
+                return book;
+            }
+            
+            return null;
+        }
+    }
+    
     public boolean addBook (Book b) throws SQLException{
         String sql = "INSERT INTO Book(name, description, price, dateOfPurcharse, publicationPlace, status) " + "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = JdbcUtils.getConn()) {
@@ -58,6 +77,7 @@ public class BookServices {
         }
         return true;
     }
+    
     
     public boolean updateBook (Book b) throws SQLException{
         String sql = "UPDATE book SET name = ?, description = ?, price = ?, dateOfPurcharse = ?, publicationPlace = ?, status = ? WHERE id in (?);";

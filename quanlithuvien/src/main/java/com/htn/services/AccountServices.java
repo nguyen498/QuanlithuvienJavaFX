@@ -5,13 +5,16 @@
 package com.htn.services;
 
 import com.htn.pojo.Account;
+import com.htn.pojo.Constants;
 import com.htn.utils.JdbcUtils;
+import com.htn.utils.Utils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -38,6 +41,24 @@ public class AccountServices {
             }
          return accounts;
          }
+    }
+    
+    public Account getAccountByID (int id) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM account WHERE id = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            
+            stm.setInt(1, id);
+
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                Account account = new Account(rs);
+                return account;
+            }
+            
+            return null;
+        }
     }
     
     public boolean updateAccount (Account a) throws SQLException{
@@ -92,4 +113,6 @@ public class AccountServices {
         }
         return true;
     }
+    
+    
 }

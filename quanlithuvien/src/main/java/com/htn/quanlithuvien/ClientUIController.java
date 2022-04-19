@@ -4,7 +4,9 @@
  */
 package com.htn.quanlithuvien;
 
+import com.htn.pojo.Account;
 import com.htn.pojo.Book;
+import com.htn.services.AccountServices;
 import com.htn.services.BookServices;
 import com.htn.utils.Utils;
 import java.io.IOException;
@@ -18,13 +20,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -34,24 +45,104 @@ import javafx.stage.Stage;
  */
 public class ClientUIController implements Initializable {
     private static final BookServices s = new BookServices();
+    private static final AccountServices a = new AccountServices();
     // Book Table
-    @FXML private TableView <Book> tbBook;
-    // Các Cột Thông tin sách
-    @FXML private TextField txtChonSach;
-    @FXML private TextField txtBookID;
-    @FXML private TextField txtBookPrice;
-    // Các Cột Thực hiện cho mượn
-    @FXML private TextField txtChonDocGia;
-    @FXML private TextField txtAccountID;
-    @FXML private TextField txtTotalBookLending;
-    @FXML private TextField txtDueDate;
+    @FXML 
+    private TableView <Book> tbBook;
     
+    // Các Cột Thông tin sách
+    @FXML 
+    private TextField txtChonSach;
+    @FXML 
+    private TextField txtBookID;
+    @FXML 
+    private TextField txtBookPrice;
+    
+    // Các Cột Thực hiện cho mượn
+    @FXML 
+    private TextField txtChonDocGia;
+    @FXML 
+    private TextField txtAccountID;
+    @FXML 
+    private TextField txtTotalBookLending;
+    @FXML 
+    private TextField txtReturnDate;
+    
+    // Các trường còn lại
+    @FXML
+    private Pane banner;
+    
+    @FXML
+    private Button adminBtn;
+
+    @FXML
+    private Button btnExit;
+
+    @FXML
+    private Button btnLending;
+
+    @FXML
+    private Button btnNavDatSach;
+
+    @FXML
+    private Button btnNavMuonSach;
+
+    @FXML
+    private Button btnNavTraSach;
+
+    @FXML
+    private Button btnSearchAccount;
+
+    @FXML
+    private Button btnSearchBook;
+
+    @FXML
+    private Label lbLink;
+
+    @FXML
+    private Label lbTitle;
+
+    @FXML
+    private TableView<Account> tbAccount;
+
+    @FXML
+    private TextField txtSearchAccount;
+
+    @FXML
+    private TextField txtSearchBook;
+
+    @FXML
+    private Button btnTraSach;
+
+    @FXML
+    private GridPane gpGroupTableMuonSach;
+
+    @FXML
+    private GridPane gpGroupTableTraSach;
+
+    @FXML
+    private GridPane gpGroupTextBoxMuonSach;
+
+    @FXML
+    private GridPane gpGroupTextBoxTraSach;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Book Table
-        generateBookTable();
-        loadDataBook(null);
+        try {
+            // Mặc định navigation mượn sách xuất hiện trước
+            toggleNavagition("MUONSACH");
+            
+            // Book Table
+            generateBookTable();
+            loadDataBook(null);
+            
+            //Account Table
+            generateAccountTable();
+            loadDataAccount(null);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
     public void adminBtnOnclick (ActionEvent evt) throws IOException{
@@ -75,6 +166,7 @@ public class ClientUIController implements Initializable {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     private void generateBookTable (){
         TableColumn col1 = new TableColumn("Id");
         col1.setCellValueFactory(new PropertyValueFactory("id"));
@@ -110,7 +202,7 @@ public class ClientUIController implements Initializable {
     public void bindingBook (MouseEvent evt){
         Book b = tbBook.getSelectionModel().getSelectedItem();  
         // Nếu status sách == 0 thì xuất thông báo k cho mượn
-        if(b.getStatus() == 0){
+        if(b != null && b.getStatus() == 0){
             Utils.showBox("Hiện tại sách này không cho mượn, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
         }
         else {
@@ -121,5 +213,117 @@ public class ClientUIController implements Initializable {
     }
     
     
+    private void loadDataAccount (String kw) throws SQLException{
+        this.tbAccount.setItems(FXCollections.observableList(a.getAccount(kw)));  
+    }
     
+    private void generateAccountTable (){
+        TableColumn col1 = new TableColumn("Id");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("Name");
+        col2.setCellValueFactory(new PropertyValueFactory("name"));
+        col2.setPrefWidth(100);
+        
+        TableColumn col3 = new TableColumn("Password");
+        col3.setCellValueFactory(new PropertyValueFactory("password"));
+        col3.setPrefWidth(100);
+        
+        TableColumn col4 = new TableColumn("Username");
+        col4.setCellValueFactory(new PropertyValueFactory("username"));
+        col4.setPrefWidth(100);
+        
+        TableColumn col5 = new TableColumn("Gender");
+        col5.setCellValueFactory(new PropertyValueFactory("gender"));
+        col5.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("Birthday");
+        col6.setCellValueFactory(new PropertyValueFactory("birthday"));
+        col6.setPrefWidth(100);
+        
+        TableColumn col7 = new TableColumn("Type");
+        col6.setCellValueFactory(new PropertyValueFactory("type"));
+        col6.setPrefWidth(100);
+        
+        this.tbAccount.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
+    }
+    
+    public void bindingAccount (MouseEvent evt){
+        Account a = tbAccount.getSelectionModel().getSelectedItem();  
+        
+        txtChonDocGia.setText("" + a.getName());
+        txtAccountID.setText("" + a.getId());
+        txtTotalBookLending.setText("" + 1);
+    }
+    
+    
+    public void handleNavigationClick (ActionEvent event) throws IOException {
+        if (event.getSource() == btnNavDatSach) {
+            lbLink.setText("/home/datsach");
+            lbTitle.setText("Đặt Sách");
+            banner.setBackground(new Background(new BackgroundFill(Color.rgb(43, 63, 99), CornerRadii.EMPTY, Insets.EMPTY)));
+            toggleNavagition("DATSACH");
+            
+        } else if (event.getSource() == btnNavMuonSach) {
+            lbLink.setText("/home/muonsach");
+            lbTitle.setText("Mượn Sách");
+            banner.setBackground(new Background(new BackgroundFill(Color.rgb(99, 43, 63), CornerRadii.EMPTY, Insets.EMPTY)));
+            toggleNavagition("MUONSACH");
+            
+        } else if (event.getSource() == btnNavTraSach) {
+            lbLink.setText("/home/trasach");
+            lbTitle.setText("Trả Sách");
+            banner.setBackground(new Background(new BackgroundFill(Color.rgb(42, 28, 66), CornerRadii.EMPTY, Insets.EMPTY)));
+            toggleNavagition("TRASACH");
+            
+        }
+    }
+    
+    private void toggleNavagition(String trigger) {
+        switch (trigger) {
+            case "DATSACH":
+                gpGroupTableMuonSach.setOpacity(0);
+                gpGroupTextBoxMuonSach.setOpacity(0);
+                gpGroupTableTraSach.setOpacity(0);
+                gpGroupTextBoxTraSach.setOpacity(0);
+                btnTraSach.setOpacity(0);
+                btnLending.setOpacity(0);
+                break;
+                
+            case "MUONSACH":
+                gpGroupTableMuonSach.setOpacity(1);
+                gpGroupTextBoxMuonSach.setOpacity(1);
+                gpGroupTableMuonSach.toFront();
+                gpGroupTextBoxMuonSach.toFront();
+                gpGroupTableTraSach.setOpacity(0);
+                gpGroupTextBoxTraSach.setOpacity(0);
+                btnTraSach.setOpacity(0);
+                btnLending.setOpacity(1);
+                btnLending.toFront();
+                break;
+                
+            case "TRASACH":
+                gpGroupTableMuonSach.setOpacity(0);
+                gpGroupTextBoxMuonSach.setOpacity(0);
+                gpGroupTableTraSach.setOpacity(1);
+                gpGroupTextBoxTraSach.setOpacity(1);
+                gpGroupTableTraSach.toFront();
+                gpGroupTextBoxTraSach.toFront();
+                btnTraSach.setOpacity(1);
+                btnTraSach.toFront();
+                btnLending.setOpacity(0);
+                break;
+                
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    
+    public void handleClose (ActionEvent event) throws IOException {
+        if (event.getSource() == btnExit) {
+            System.exit(0);
+        }
+    }
 }
