@@ -9,10 +9,12 @@ import com.htn.pojo.AccountType;
 import com.htn.pojo.Author;
 import com.htn.pojo.Book;
 import com.htn.pojo.Category;
+import com.htn.pojo.LibraryCard;
 import com.htn.services.AccountServices;
 import com.htn.services.AuthorServices;
 import com.htn.services.BookServices;
 import com.htn.services.CategoryServices;
+import com.htn.services.LibraryCardServices;
 import com.htn.utils.Utils;
 import java.net.URL;
 import java.sql.Date;
@@ -44,6 +46,7 @@ public class ManagerGUIController implements Initializable {
     private static final AccountServices a = new AccountServices();
     private static final CategoryServices c = new CategoryServices();
     private static final AuthorServices au = new AuthorServices();
+    private static final LibraryCardServices cardServices = new LibraryCardServices();
     /**
      * Initializes the controller class.
      */
@@ -88,6 +91,10 @@ public class ManagerGUIController implements Initializable {
     @FXML private TextField txtAuthor;
     @FXML private TextField txtIdAuthor;
     @FXML private TextField txtKeywordAuthor;
+    //endregion
+    
+    //region attribute card
+    @FXML private TableView <LibraryCard> tbCards;
     //endregion
     
     //Region book manager
@@ -149,6 +156,9 @@ public class ManagerGUIController implements Initializable {
                 Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+        
+        this.loadColumnCard();
+        this.loadDataCards(null);
     }    
     
     private void loadDataBook(String kw) {
@@ -582,6 +592,49 @@ public class ManagerGUIController implements Initializable {
             this.loadDataAuthors(null);
         } else {
              Utils.showBox("Delete failed!", Alert.AlertType.WARNING).show();
+        }
+    }
+    //endregion
+    
+    //region card manager
+    private void loadColumnCard (){
+        TableColumn col1 = new TableColumn("cardNumber");
+        col1.setCellValueFactory(new PropertyValueFactory("cardNumber"));
+        col1.setPrefWidth(100);
+        
+        TableColumn col2 = new TableColumn("Member name");
+        col2.setCellValueFactory(new PropertyValueFactory("name"));
+        col2.setPrefWidth(150);
+        
+        TableColumn col3 = new TableColumn("Gender");
+        col3.setCellValueFactory(new PropertyValueFactory("gender"));
+        col3.setPrefWidth(50);
+        
+        TableColumn col4 = new TableColumn("birthdate");
+        col4.setCellValueFactory(new PropertyValueFactory("birthdate"));
+        col4.setPrefWidth(100);
+        
+        TableColumn col5 = new TableColumn("IssuedAt");
+        col5.setCellValueFactory(new PropertyValueFactory("issuedAt"));
+        col5.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("Active");
+        col6.setCellValueFactory(new PropertyValueFactory("active"));
+        col6.setPrefWidth(50);
+        
+        TableColumn col7 = new TableColumn("AccountType");
+        col7.setCellValueFactory(new PropertyValueFactory("accountType"));
+        col7.setPrefWidth(100);
+        
+        this.tbCards.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
+     }
+    
+    private void loadDataCards(String kw) {
+        try {
+            // Load Book Data
+            this.tbCards.setItems(FXCollections.observableList(cardServices.getCards(kw)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     //endregion

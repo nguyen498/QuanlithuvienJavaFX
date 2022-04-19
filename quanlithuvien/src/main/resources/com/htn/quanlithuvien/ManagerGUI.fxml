@@ -497,7 +497,7 @@
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <GridPane prefHeight="471.0" prefWidth="671.0">
+                        <GridPane prefHeight="488.0" prefWidth="671.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                            </columnConstraints>
@@ -506,7 +506,22 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <TableView prefHeight="230.0" prefWidth="671.0" />
+                              <TableView fx:id="tbCards" prefHeight="230.0" prefWidth="671.0" />
+                              <ComboBox prefWidth="250.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="TOP">
+                                 <GridPane.margin>
+                                    <Insets top="30.0" />
+                                 </GridPane.margin>
+                              </ComboBox>
+                              <Button mnemonicParsing="false" text="Kích hoạt thẻ" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" left="200.0" />
+                                 </GridPane.margin>
+                              </Button>
+                              <Button mnemonicParsing="false" text="Khóa thẻ" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets bottom="50.0" right="201.0" />
+                                 </GridPane.margin>
+                              </Button>
                            </children>
                         </GridPane>
                      </children>
