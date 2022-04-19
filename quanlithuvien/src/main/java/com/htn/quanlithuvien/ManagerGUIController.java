@@ -93,18 +93,20 @@ public class ManagerGUIController implements Initializable {
     //Region book manager
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Book
+        
         this.loadColumnBook();
         this.loadDataBook(null);
         cbStatus.setItems(list);
         cbGender.setItems(listGender);
+        cbGender.setValue(listGender.get(0));
         cbAccountType.setItems(listAccountType);
+        cbAccountType.setValue(listAccountType.get(1));
         
         this.txtKeyWord.textProperty().addListener((evt) ->{
             this.loadDataBook(this.txtKeyWord.getText());
         });
         
-        // Account
+        
         this.loadColumnAccount();
         try {
             this.loadDataAccount(null);
@@ -191,25 +193,42 @@ public class ManagerGUIController implements Initializable {
      }
     
     public void addBook(ActionEvent evt) throws SQLException {
-        String name = this.txtName.getText();
-        String des = this.txtDescription.getText();
-        Double price = Double.parseDouble(this.txtPrice.getText());
-        Date dateOfPurcharse = (Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText());
-        String publicationPlace = this.txtPublicationPlace.getText();
-        int status = 1;
-        if(cbStatus.getSelectionModel().getSelectedItem().equals("Còn")){
-           status = 1;
+        if(txtName.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter Name!", Alert.AlertType.WARNING).show();
         }
-        else if (cbStatus.getSelectionModel().getSelectedItem().equals("Hết")){
-           status = 0;
+        else if(txtDescription.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter Description!", Alert.AlertType.WARNING).show();
         }
+        else if(txtPrice.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter Price!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtDateOfPurcharse.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter DateOfPurcharse!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtPublicationPlace.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not choose PublicationPlace!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            String name = this.txtName.getText();
+            String des = this.txtDescription.getText();
+            Double price = Double.parseDouble(this.txtPrice.getText());
+            Date dateOfPurcharse = (Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText());
+            String publicationPlace = this.txtPublicationPlace.getText();
+            int status = 1;
+            if(cbStatus.getSelectionModel().getSelectedItem().equals("Còn")){
+               status = 1;
+            }
+            else if (cbStatus.getSelectionModel().getSelectedItem().equals("Hết")){
+               status = 0;
+            }
 
-        Book b = new Book (name, des, price, dateOfPurcharse, publicationPlace, status);
-        if (s.addBook(b) == true) {
-            Utils.showBox("Add successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataBook(null);
-        } else {
-             Utils.showBox("Add failed!", Alert.AlertType.WARNING).show();
+            Book b = new Book (name, des, price, dateOfPurcharse, publicationPlace, status);
+            if (s.addBook(b) == true) {
+                Utils.showBox("Add successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataBook(null);
+            } else {
+                 Utils.showBox("Add failed!", Alert.AlertType.WARNING).show();
+            }
         }
     }
     
@@ -230,26 +249,43 @@ public class ManagerGUIController implements Initializable {
     }
     
     public void updateBook(ActionEvent evt) throws SQLException{
-        int id = Integer.parseInt(this.txtId.getText());
-        String name = this.txtName.getText();
-        String des = this.txtDescription.getText();
-        Double price = Double.parseDouble(this.txtPrice.getText());
-        Date dateOfPurcharse = (Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText());
-        String publicationPlace = this.txtPublicationPlace.getText();
-        int status = 1;
-        if(cbStatus.getSelectionModel().getSelectedItem().equals("Còn")){
-           status = 1;
+        if(txtName.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter Name!", Alert.AlertType.WARNING).show();
         }
-        else if (cbStatus.getSelectionModel().getSelectedItem().equals("Hết")){
-           status = 0;
+        else if(txtDescription.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter Description!", Alert.AlertType.WARNING).show();
         }
+        else if(txtPrice.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter Price!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtDateOfPurcharse.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter DateOfPurcharse!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtPublicationPlace.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not choose PublicationPlace!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            int id = Integer.parseInt(this.txtId.getText());
+            String name = this.txtName.getText();
+            String des = this.txtDescription.getText();
+            Double price = Double.parseDouble(this.txtPrice.getText());
+            Date dateOfPurcharse = (Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText());
+            String publicationPlace = this.txtPublicationPlace.getText();
+            int status = 1;
+            if(cbStatus.getSelectionModel().getSelectedItem().equals("Còn")){
+               status = 1;
+            }
+            else if (cbStatus.getSelectionModel().getSelectedItem().equals("Hết")){
+               status = 0;
+            }
 
-        Book b = new Book (id, name, des, price, dateOfPurcharse, publicationPlace, status);
-        if (s.updateBook(b) == true) {
-            Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataBook(null);
-        } else {
-             Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
+            Book b = new Book (id, name, des, price, dateOfPurcharse, publicationPlace, status);
+            if (s.updateBook(b) == true) {
+                Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataBook(null);
+            } else {
+                 Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
+            }
         }
     }
     
@@ -325,44 +361,74 @@ public class ManagerGUIController implements Initializable {
     }
     
     public void addAccount(ActionEvent evt) throws SQLException {
-        int type = 1;
-        int id = Integer.parseInt(this.txtIdAccount.getText());
-        String name = this.txtNameAccount.getText();
-        String pass = this.txtPassword.getText();
-        String username = this.txtUsername.getText();
-        String gender = cbGender.getSelectionModel().getSelectedItem();
-        Date birthdate = (Date) Utils.toSqlDate(this.txtbirthdate.getText());
-        if(cbAccountType.getSelectionModel().getSelectedItem().equals("Admin")){
-           type = 0;
+        if(txtNameAccount.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter name!", Alert.AlertType.WARNING).show();
         }
-        else if (cbAccountType.getSelectionModel().getSelectedItem().equals("Student")){
-           type = 1;
+        else if(txtUsername.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter username!", Alert.AlertType.WARNING).show();
         }
+        else if(txtPassword.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter pass!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtbirthdate.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter birthday!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            int type = 1;
+            String name = this.txtNameAccount.getText();
+            String pass = this.txtPassword.getText();
+            String username = this.txtUsername.getText();
+            String gender = cbGender.getSelectionModel().getSelectedItem();
+            Date birthdate = (Date) Utils.toSqlDate(this.txtbirthdate.getText());
+            if(cbAccountType.getSelectionModel().getSelectedItem().equals("Admin")){
+               type = 0;
+            }
+            else if (cbAccountType.getSelectionModel().getSelectedItem().equals("Student")){
+               type = 1;
+            }
         
-        Account acc = new Account (id, name, pass, username, gender, birthdate, type);
-        if (a.addAccount(acc) == true) {
-            Utils.showBox("Add account successfully!", Alert.AlertType.INFORMATION).show();
-            this.loadDataAccount(null);
-        } else {
-             Utils.showBox("Add account failed", Alert.AlertType.WARNING).show();
+            Account acc = new Account (name, pass, username, gender, birthdate, type);
+
+            
+            if (a.addAccount(acc) == true) {
+                Utils.showBox("Add account successfully!", Alert.AlertType.INFORMATION).show();
+                this.loadDataAccount(null);
+            } else {
+                 Utils.showBox("Add account failed", Alert.AlertType.WARNING).show();
+            }
         }
     }
     
     public void updateAccount (ActionEvent evt) throws SQLException{
-        int id = Integer.parseInt(this.txtIdAccount.getText());
-        String name = this.txtNameAccount.getText();
-        String pass = this.txtPassword.getText();
-        String username = this.txtUsername.getText();
-        String gender = cbGender.getSelectionModel().getSelectedItem();
-        Date birthdate = (Date) Utils.toSqlDate(this.txtbirthdate.getText());
-
-        Account acc = new Account (id, name, pass, username, gender, birthdate, 0);
-        if (a.updateAccount(acc) == true) {
-            Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataAccount(null);
-        } else {
-             Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
+        if(txtNameAccount.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter name!", Alert.AlertType.WARNING).show();
         }
+        else if(txtUsername.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter username!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtPassword.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter pass!", Alert.AlertType.WARNING).show();
+        }
+        else if(txtbirthdate.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter birthday!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            int id = Integer.parseInt(this.txtIdAccount.getText());
+            String name = this.txtNameAccount.getText();
+            String pass = this.txtPassword.getText();
+            String username = this.txtUsername.getText();
+            String gender = cbGender.getSelectionModel().getSelectedItem();
+            Date birthdate = (Date) Utils.toSqlDate(this.txtbirthdate.getText());
+
+            Account acc = new Account (id, name, pass, username, gender, birthdate, 0);
+            if (a.updateAccount(acc) == true) {
+                Utils.showBox("Update successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataAccount(null);
+            } else {
+                 Utils.showBox("Update failed!", Alert.AlertType.WARNING).show();
+            }
+        }
+        
     }
     
     public void deleteAccount (ActionEvent evt) throws SQLException{
@@ -400,13 +466,18 @@ public class ManagerGUIController implements Initializable {
     }
     
     public void addCategory (ActionEvent evt) throws SQLException{
-        Category cate = new Category(txtCategory.getText());
+        if(txtCategory.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter name category!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            Category cate = new Category(txtCategory.getText());
         
-        if (c.addCategory(cate) == true) {
-            Utils.showBox("Add category successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataCategory(null);
-        } else {
-             Utils.showBox("Add category failed!", Alert.AlertType.WARNING).show();
+            if (c.addCategory(cate) == true) {
+                Utils.showBox("Add category successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataCategory(null);
+            } else {
+                 Utils.showBox("Add category failed!", Alert.AlertType.WARNING).show();
+            }
         }
     }
     
@@ -418,13 +489,18 @@ public class ManagerGUIController implements Initializable {
     }
     
     public void updateCategory (ActionEvent evt) throws SQLException{
-        Category cate = new Category( Integer.parseInt(txtIdCategory.getText()),txtCategory.getText());
+        if(txtCategory.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter name category!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            Category cate = new Category( Integer.parseInt(txtIdCategory.getText()),txtCategory.getText());
         
-        if (c.updateCategory(cate) == true) {
-            Utils.showBox("update category successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataCategory(null);
-        } else {
-             Utils.showBox("update category failed!", Alert.AlertType.WARNING).show();
+            if (c.updateCategory(cate) == true) {
+                Utils.showBox("update category successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataCategory(null);
+            } else {
+                 Utils.showBox("update category failed!", Alert.AlertType.WARNING).show();
+            }
         }
     }
     
@@ -459,13 +535,18 @@ public class ManagerGUIController implements Initializable {
     }
     
     public void addAuthor (ActionEvent evt) throws SQLException{
-        Author author = new Author(txtAuthor.getText());
+        if(txtAuthor.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter name author!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            Author author = new Author(txtAuthor.getText());
         
-        if (au.addAuthor(author) == true) {
-            Utils.showBox("Add author successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataAuthors(null);
-        } else {
-             Utils.showBox("Add author failed!", Alert.AlertType.WARNING).show();
+            if (au.addAuthor(author) == true) {
+                Utils.showBox("Add author successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataAuthors(null);
+            } else {
+                 Utils.showBox("Add author failed!", Alert.AlertType.WARNING).show();
+            }
         }
     }
     
@@ -477,13 +558,18 @@ public class ManagerGUIController implements Initializable {
     }
     
     public void updateAuthor (ActionEvent evt) throws SQLException{
-        Author author = new Author( Integer.parseInt(txtIdAuthor.getText()),txtAuthor.getText());
-        
-        if (au.updateAuthor(author) == true) {
-            Utils.showBox("update author successful!", Alert.AlertType.INFORMATION).show();
-            this.loadDataAuthors(null);
-        } else {
-             Utils.showBox("update author failed!", Alert.AlertType.WARNING).show();
+        if(txtAuthor.getText().replaceAll(" ", "").equals("")){
+            Utils.showBox("Not enter name author!", Alert.AlertType.WARNING).show();
+        }
+        else{
+            Author author = new Author( Integer.parseInt(txtIdAuthor.getText()),txtAuthor.getText());
+
+            if (au.updateAuthor(author) == true) {
+                Utils.showBox("update author successful!", Alert.AlertType.INFORMATION).show();
+                this.loadDataAuthors(null);
+            } else {
+                 Utils.showBox("update author failed!", Alert.AlertType.WARNING).show();
+            }   
         }
     }
     
