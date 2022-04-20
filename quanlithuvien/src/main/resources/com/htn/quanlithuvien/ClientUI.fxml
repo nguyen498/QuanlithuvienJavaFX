@@ -127,7 +127,7 @@
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <TextField fx:id="txtReturnDate" layoutX="117.0" layoutY="107.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtReturnDate" disable="true" layoutX="117.0" layoutY="107.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>
@@ -205,11 +205,6 @@
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="txtTotalBookLending1" layoutX="105.0" layoutY="67.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label layoutX="20.0" layoutY="111.0" text="Ngày hẹn trả:" GridPane.rowIndex="3">
-                     <GridPane.margin>
-                        <Insets left="10.0" />
-                     </GridPane.margin>
-                  </Label>
                   <TextField fx:id="txtReturnDate1" layoutX="117.0" layoutY="107.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
@@ -224,7 +219,7 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Button fx:id="btnLending" mnemonicParsing="false" prefHeight="53.0" prefWidth="119.0" text="Cho Mượn" textFill="WHITE" />
+            <Button fx:id="btnLending" mnemonicParsing="false" onAction="#handleLendingBtn" prefHeight="53.0" prefWidth="119.0" text="Cho Mượn" textFill="WHITE" />
             <Button fx:id="btnTraSach" mnemonicParsing="false" opacity="0.0" prefHeight="53.0" prefWidth="119.0" text="Trả Sách" textFill="WHITE" />
             <Button fx:id="btnExit" mnemonicParsing="false" onAction="#handleClose" prefHeight="53.0" prefWidth="119.0" text="Kết Thúc" textFill="WHITE" GridPane.rowIndex="1" />
          </children>

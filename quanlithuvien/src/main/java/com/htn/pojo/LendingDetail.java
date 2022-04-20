@@ -12,56 +12,37 @@ import java.sql.Date;
  */
 
 public class LendingDetail {
-
-    private String bookID;
-
-    private String lendingTicketID;
-
+    
+    private Date dueDate;
+    
     private double amount;
 
-    private Date returnDate;
+    private int bookID;
 
-    private Date dueDate;
+    private int lendingID;
 
     public LendingDetail() {
     }
 
-    public LendingDetail(String bookID, String lendingTicketID, double amount, Date returnDate, Date dueDate) {
-        this.bookID = bookID;
-        this.lendingTicketID = lendingTicketID;
-        this.amount = amount;
-        this.returnDate = returnDate;
+    public LendingDetail(Date dueDate, double amount, int bookID, int lendingID) {
         this.dueDate = dueDate;
-    }
-
-        
-        
-    /**
-     * @return the bookID
-     */
-    public String getBookID() {
-        return bookID;
-    }
-
-    /**
-     * @param bookID the bookID to set
-     */
-    public void setBookID(String bookID) {
+        this.amount = amount;
         this.bookID = bookID;
+        this.lendingID = lendingID;
     }
 
     /**
-     * @return the lendingTicketID
+     * @return the dueDate
      */
-    public String getLendingTicketID() {
-        return lendingTicketID;
+    public Date getDueDate() {
+        return dueDate;
     }
 
     /**
-     * @param lendingTicketID the lendingTicketID to set
+     * @param dueDate the dueDate to set
      */
-    public void setLendingTicketID(String lendingTicketID) {
-        this.lendingTicketID = lendingTicketID;
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 
     /**
@@ -79,33 +60,35 @@ public class LendingDetail {
     }
 
     /**
-     * @return the returnDate
+     * @return the bookID
      */
-    public Date getReturnDate() {
-        return returnDate;
+    public int getBookID() {
+        return bookID;
     }
 
     /**
-     * @param returnDate the returnDate to set
+     * @param bookID the bookID to set
      */
-    public void setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
+    public void setBookID(int bookID) {
+        this.bookID = bookID;
     }
 
     /**
-     * @return the dueDate
+     * @return the lendingID
      */
-    public Date getDueDate() {
-        return dueDate;
+    public int getLendingID() {
+        return lendingID;
     }
 
     /**
-     * @param dueDate the dueDate to set
+     * @param lendingID the lendingID to set
      */
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
+    public void setLendingID(int lendingID) {
+        this.lendingID = lendingID;
     }
-        
-        
+    
+    
+
+    
 
 }
