@@ -104,6 +104,7 @@ public class ManagerGUIController implements Initializable {
         this.loadColumnBook();
         this.loadDataBook(null);
         cbStatus.setItems(list);
+        cbStatus.setValue(list.get(0));
         cbGender.setItems(listGender);
         cbGender.setValue(listGender.get(0));
         cbAccountType.setItems(listAccountType);
@@ -212,11 +213,17 @@ public class ManagerGUIController implements Initializable {
         else if(txtPrice.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter Price!", Alert.AlertType.WARNING).show();
         }
+        else if(!Utils.isNumeric(txtPrice.getText())){
+            Utils.showBox("Price isn't number!", Alert.AlertType.WARNING).show();
+        }
         else if(txtDateOfPurcharse.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter DateOfPurcharse!", Alert.AlertType.WARNING).show();
         }
         else if(txtPublicationPlace.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not choose PublicationPlace!", Alert.AlertType.WARNING).show();
+        }
+        else if((Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText()) == null){
+            Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
         }
         else{
             String name = this.txtName.getText();
@@ -631,7 +638,6 @@ public class ManagerGUIController implements Initializable {
     
     private void loadDataCards(String kw) {
         try {
-            // Load Book Data
             this.tbCards.setItems(FXCollections.observableList(cardServices.getCards(kw)));
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
