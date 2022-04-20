@@ -22,20 +22,20 @@ public class LendingDetailServices {
     /*
         Thêm chi tiết hóa đơn
     */
-    public boolean addLendingDetail (int bookID, int AccountID, int totalBookLending) throws SQLException{
+    public boolean addLendingDetail (int bookID, int cardID, int totalBookLending) throws SQLException{
         
         return false;
     }
     
     /*
-        Thanh toán mượn sách 
+        Hàm cho mượn sách 
     */
-    public boolean checkoutBookItem(int bookID, int AccountID, int totalBookLending) throws SQLException {
+    public boolean lendingBook(int bookID, int cardID, int numberBookLending) throws SQLException {
         BookServices bs = new BookServices();
         LendingTicketServices lts = new LendingTicketServices();
         
-        // SL Sách đã mượn + SL sách muốn mượn >= SL sách cho phép thì k cho mượn
-        if ((lts.getTotalBooksLended() + totalBookLending) >= Constants.MAX_BOOKS_LENDING_TO_A_USER()) {
+        // SL Sách đã mượn + SL sách muốn mượn > SL sách cho phép thì k cho mượn
+        if ((lts.getTotalBooksLended() + numberBookLending) > Constants.MAX_BOOKS_LENDING_TO_A_USER()) {
             Utils.showBox("Ngơời dùng đã mượn quá số lượng sách cho phép!!", Alert.AlertType.ERROR).show();
             return false;
         }
@@ -58,20 +58,16 @@ public class LendingDetailServices {
         */
 
         // Tạo phiếu mượn (LendingTicket) cho người dùng nếu chưa có
-        lts.addLendingTicket(AccountID);
+        lts.addLendingTicket(cardID);
         
         // Thêm sách muốn mượn, account, số lượng sách thuê vào Chi Tiết Phiếu mượn (LendingDetail), thất bại thì trả về false
-        if (this.addLendingDetail(bookID, AccountID, totalBookLending) == false) 
+        if (this.addLendingDetail(bookID, cardID, numberBookLending) == false) 
             return false;
-        
-        /*
         
         // Tạo hóa đơn mượn sách, thất bại thì trả về false
         PaymentServices ps = new PaymentServices();
-        if (ps.checkout(bookID, AccountID) == false) 
+        if (ps.checkout(bookID, cardID) == false) 
             return false;
-
-        */
 
         // Tăng tổng số lượng sách đã mượn lên 1 
         lts.incrementTotalBooksLended();
