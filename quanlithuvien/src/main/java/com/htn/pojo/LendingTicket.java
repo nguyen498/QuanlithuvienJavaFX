@@ -1,5 +1,12 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.htn.pojo;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class LendingTicket {
     
@@ -11,17 +18,31 @@ public class LendingTicket {
 
     private int status;
     
-    private int cardID;
+    private int accountID;
 
     public LendingTicket() {
     }
 
-    public LendingTicket(int id, int totalBookLended, Date dateLanding, int status, int cardID) {
+    public LendingTicket(int id, int totalBookLended, Date dateLanding, int status, int accountID) {
         this.id = id;
         this.totalBookLended = totalBookLended;
         this.dateLending = dateLanding;
         this.status = status;
-        this.cardID = cardID;
+        this.accountID = accountID;
+    }
+    
+    public LendingTicket(int totalBookLended, Date dateLanding, int status, int accountID) {
+        this.totalBookLended = totalBookLended;
+        this.dateLending = dateLanding;
+        this.status = status;
+        this.accountID = accountID;
+    }
+    
+    public LendingTicket(ResultSet rs) throws SQLException {
+        this.totalBookLended = rs.getInt("totalBookLended");
+        this.dateLending = rs.getDate("dateLending");
+        this.status = rs.getInt("status");
+        this.accountID = rs.getInt("accountID");
     }
 
     /**
@@ -53,17 +74,17 @@ public class LendingTicket {
     }
 
     /**
-     * @return the dateLanding
+     * @return the dateLending
      */
-    public Date getDateLanding() {
+    public Date getDateLending() {
         return dateLending;
     }
 
     /**
-     * @param dateLanding the dateLanding to set
+     * @param dateLending the dateLending to set
      */
-    public void setDateLanding(Date dateLanding) {
-        this.dateLending = dateLanding;
+    public void setDateLending(Date dateLending) {
+        this.dateLending = dateLending;
     }
 
     /**
@@ -81,17 +102,17 @@ public class LendingTicket {
     }
 
     /**
-     * @return the cardID
+     * @return the accountID
      */
-    public int getCardID() {
-        return cardID;
+    public int getAccountID() {
+        return accountID;
     }
 
     /**
-     * @param cardID the cardID to set
+     * @param accountID the accountID to set
      */
-    public void setCardID(int cardID) {
-        this.cardID = cardID;
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
     }
 
     

@@ -1,0 +1,23 @@
+0 ticket  =>
+
+- Tạo 1 ticket, add 1 sách
+- Tạo 0, add 1 sách nữa
+
+nếu ticket status = BORROWING => Ko tạo ticket
+nếu ticket status = returned => tạo mới ticket
+
+Checkout()
+
+Lặp từng LendingDetail
+sách 1 => mượn trễ hạn 2 ngày => phạt 2 * 5000 = 10000
+sách 2 => không trễ
+=> fine 
+
+Book
+Lặp từng Book
+Tiền Sách 1 = Price * LendingDetail.quantity
+Tiền sách 2 = Price * LendingDetail.quantity
+Tổng tiền sách = Tiền Sách 1 + Tiền Sách 2
+
+Payment
+Tổng = Fine + Tổng tiền sách
