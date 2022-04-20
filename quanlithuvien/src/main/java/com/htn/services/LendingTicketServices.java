@@ -11,11 +11,11 @@ import java.sql.SQLException;
  * @author Administrator
  */
 public class LendingTicketServices {
-    public void addLendingTicket (int accountID) throws SQLException{
+    public void addLendingTicket (int cardID) throws SQLException{
         AccountServices as = new AccountServices();
         
         // Nếu người dùng chưa có phiếu mượn => Tạo mới
-        if (as.getAccountByID(accountID) == null) {
+        if (as.getAccountByID(cardID) == null) {
             // Create
             
         }
