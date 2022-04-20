@@ -133,7 +133,7 @@ CREATE TABLE `category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,6 +142,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'ngu ngon');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,9 +209,10 @@ DROP TABLE IF EXISTS `lendingticket`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lendingticket` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dateLending` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `totalBookLended` int NOT NULL DEFAULT '0',
   `accountID` int NOT NULL,
+  `status` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `accountID` (`accountID`),
   CONSTRAINT `lendingticket_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `account` (`id`)
@@ -262,9 +264,8 @@ DROP TABLE IF EXISTS `payment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `ammount` float NOT NULL DEFAULT '0',
+  `total` float NOT NULL DEFAULT '0',
   `fine` float NOT NULL DEFAULT '0',
-  `status` int NOT NULL DEFAULT '0',
   `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `accountID` int NOT NULL,
   `lendingID` int NOT NULL,
@@ -349,4 +350,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-17 14:39:32
+-- Dump completed on 2022-04-20 15:29:38
