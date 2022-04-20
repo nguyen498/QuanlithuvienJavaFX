@@ -81,6 +81,11 @@ public class Utils {
             return "n/a";
     }
     
+
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+          }
+
     public static String xuatNgayThangNam2(java.util.Date ntn) {
         if (ntn != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -89,5 +94,4 @@ public class Utils {
         }else
             return "n/a";
     }
-    
 }
