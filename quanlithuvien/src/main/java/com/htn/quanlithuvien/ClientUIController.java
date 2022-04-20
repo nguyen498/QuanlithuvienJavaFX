@@ -8,6 +8,7 @@ import com.htn.pojo.Account;
 import com.htn.pojo.Book;
 import com.htn.services.AccountServices;
 import com.htn.services.BookServices;
+import com.htn.services.LendingDetailServices;
 import com.htn.utils.Utils;
 import java.io.IOException;
 import java.net.URL;
@@ -46,6 +47,8 @@ import javafx.stage.Stage;
 public class ClientUIController implements Initializable {
     private static final BookServices s = new BookServices();
     private static final AccountServices a = new AccountServices();
+    private static final LendingDetailServices lds = new LendingDetailServices();
+    
     // Book Table
     @FXML 
     private TableView <Book> tbBook;
@@ -144,6 +147,7 @@ public class ClientUIController implements Initializable {
             Logger.getLogger(ClientUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
+    
     
     public void adminBtnOnclick (ActionEvent evt) throws IOException{
         showManagerGUI();
@@ -250,11 +254,13 @@ public class ClientUIController implements Initializable {
     }
     
     public void bindingAccount (MouseEvent evt){
-        Account a = tbAccount.getSelectionModel().getSelectedItem();  
+        Account acc = tbAccount.getSelectionModel().getSelectedItem();  
         
-        txtChonDocGia.setText("" + a.getName());
-        txtAccountID.setText("" + a.getId());
-        txtTotalBookLending.setText("" + 1);
+        if (acc != null) {
+            txtChonDocGia.setText("" + acc.getName());
+            txtAccountID.setText("" + acc.getId());
+            txtTotalBookLending.setText("" + 1);
+        }
     }
     
     
@@ -326,4 +332,17 @@ public class ClientUIController implements Initializable {
             System.exit(0);
         }
     }
+    
+    
+    public void handleLendingBtn (ActionEvent event) throws IOException, SQLException {
+        int bookID = Integer.parseInt(txtBookID.getText());
+        int accountID = Integer.parseInt(txtAccountID.getText());
+        int numberBookLending = Integer.parseInt(txtTotalBookLending.getText());
+        
+        if (lds.lendingBook(bookID, accountID, numberBookLending) == true)
+            Utils.showBox("Mượn sách thành công", Alert.AlertType.CONFIRMATION).show();
+        else
+            Utils.showBox("Có lỗi xảy ra ", Alert.AlertType.ERROR).show();
+    }
+    
 }
