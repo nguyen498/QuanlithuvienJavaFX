@@ -109,7 +109,7 @@ CREATE TABLE `book` (
   `publicationPlace` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',1);
+INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',1),(6,'Sach xin','Đây Là Quyển Sách',50000,'2021-02-23 00:00:00','HN',1),(7,'Sách Không Xịn','Đây là sách không xịn',2000,'2111-11-01 00:00:00','HN',1);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,7 +181,7 @@ DROP TABLE IF EXISTS `lending_detail`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `lending_detail` (
   `dueDate` datetime NOT NULL,
-  `ammount` float NOT NULL DEFAULT '0',
+  `amount` float NOT NULL DEFAULT '0',
   `bookID` int NOT NULL,
   `lendingID` int NOT NULL,
   PRIMARY KEY (`bookID`,`lendingID`),
@@ -197,6 +197,7 @@ CREATE TABLE `lending_detail` (
 
 LOCK TABLES `lending_detail` WRITE;
 /*!40000 ALTER TABLE `lending_detail` DISABLE KEYS */;
+INSERT INTO `lending_detail` VALUES ('2022-05-21 00:00:00',200,5,20),('2022-05-21 00:00:00',50000,6,20),('2022-05-21 00:00:00',2000,7,19),('2022-05-21 00:00:00',2000,7,20);
 /*!40000 ALTER TABLE `lending_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -216,7 +217,7 @@ CREATE TABLE `lendingticket` (
   PRIMARY KEY (`id`),
   KEY `accountID` (`accountID`),
   CONSTRAINT `lendingticket_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,6 +226,7 @@ CREATE TABLE `lendingticket` (
 
 LOCK TABLES `lendingticket` WRITE;
 /*!40000 ALTER TABLE `lendingticket` DISABLE KEYS */;
+INSERT INTO `lendingticket` VALUES (19,'0026-10-13 00:00:00',1,1,1),(20,'0026-10-13 00:00:00',3,3,1);
 /*!40000 ALTER TABLE `lendingticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -350,4 +352,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-20 15:29:38
+-- Dump completed on 2022-04-21 17:21:34

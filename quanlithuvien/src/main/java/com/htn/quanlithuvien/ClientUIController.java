@@ -4,6 +4,7 @@
  */
 package com.htn.quanlithuvien;
 
+import com.htn.pojo.LendingDetail;
 import com.htn.pojo.Account;
 import com.htn.pojo.Book;
 import com.htn.services.AccountServices;
@@ -129,24 +130,63 @@ public class ClientUIController implements Initializable {
     @FXML
     private GridPane gpGroupTextBoxTraSach;
     
+    
+    
+    
+//    Table Trả Sách
+    @FXML
+    private TableView<Account> tbTraSachAccount;
+    
+    @FXML
+    private TableView<LendingDetail> tbTraSachLendingDetail;
+    
+    @FXML
+    private TextField txtTraSachChonDocGia;
+    @FXML
+    private TextField txtTraSachMaDocGia;
+//    @FXML
+//    private TextField txtTraSachSoLuongMuon;
+    @FXML
+    private TextField txtTraSachMaPhieuMuon;
+    
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            // Mặc định navigation mượn sách xuất hiện trước
+           // Mặc định navigation mượn sách xuất hiện trước
             toggleNavagition("MUONSACH");
-            
+
             // Book Table
             generateBookTable();
             loadDataBook(null);
-            
+
             //Account Table
             generateAccountTable();
             loadDataAccount(null);
+            
+            //TraSach Account Table
+            generateTableTraSachAccount();
+            loadtbTraSachAccountData(null);
+            
+            //TraSach Account Table
+            generateTableTraSachLendingDetail();
             
         } catch (SQLException ex) {
             Logger.getLogger(ClientUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
+    
+    public void loadAllData() throws SQLException {
+        // Book Table
+        loadDataBook(null);
+            
+        //Account Table
+        loadDataAccount(null);
+        
+        //Account Table
+        loadtbTraSachAccountData(null);
+    }
     
     
     public void adminBtnOnclick (ActionEvent evt) throws IOException{
@@ -230,10 +270,6 @@ public class ClientUIController implements Initializable {
         col2.setCellValueFactory(new PropertyValueFactory("name"));
         col2.setPrefWidth(100);
         
-        TableColumn col3 = new TableColumn("Password");
-        col3.setCellValueFactory(new PropertyValueFactory("password"));
-        col3.setPrefWidth(100);
-        
         TableColumn col4 = new TableColumn("Username");
         col4.setCellValueFactory(new PropertyValueFactory("username"));
         col4.setPrefWidth(100);
@@ -247,10 +283,10 @@ public class ClientUIController implements Initializable {
         col6.setPrefWidth(100);
         
         TableColumn col7 = new TableColumn("Type");
-        col6.setCellValueFactory(new PropertyValueFactory("type"));
-        col6.setPrefWidth(100);
+        col7.setCellValueFactory(new PropertyValueFactory("type"));
+        col7.setPrefWidth(100);
         
-        this.tbAccount.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
+        this.tbAccount.getColumns().addAll(col1, col2, col4, col5, col6, col7);
     }
     
     public void bindingAccount (MouseEvent evt){
@@ -264,20 +300,24 @@ public class ClientUIController implements Initializable {
     }
     
     
-    public void handleNavigationClick (ActionEvent event) throws IOException {
+    public void handleNavigationClick (ActionEvent event) throws IOException, SQLException {
         if (event.getSource() == btnNavDatSach) {
+            loadAllData();
             lbLink.setText("/home/datsach");
             lbTitle.setText("Đặt Sách");
             banner.setBackground(new Background(new BackgroundFill(Color.rgb(43, 63, 99), CornerRadii.EMPTY, Insets.EMPTY)));
             toggleNavagition("DATSACH");
             
+            
         } else if (event.getSource() == btnNavMuonSach) {
+            loadAllData();
             lbLink.setText("/home/muonsach");
             lbTitle.setText("Mượn Sách");
             banner.setBackground(new Background(new BackgroundFill(Color.rgb(99, 43, 63), CornerRadii.EMPTY, Insets.EMPTY)));
             toggleNavagition("MUONSACH");
             
         } else if (event.getSource() == btnNavTraSach) {
+            loadAllData();
             lbLink.setText("/home/trasach");
             lbTitle.setText("Trả Sách");
             banner.setBackground(new Background(new BackgroundFill(Color.rgb(42, 28, 66), CornerRadii.EMPTY, Insets.EMPTY)));
@@ -344,5 +384,73 @@ public class ClientUIController implements Initializable {
         else
             Utils.showBox("Có lỗi xảy ra ", Alert.AlertType.ERROR).show();
     }
+   
     
+    
+    private void loadtbTraSachAccountData(String kw) {
+        try {
+            // Load Book Data
+            this.tbTraSachAccount.setItems(FXCollections.observableList(a.getTraSachAccount(null)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void generateTableTraSachAccount (){
+        TableColumn col1 = new TableColumn("Id");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("Name");
+        col2.setCellValueFactory(new PropertyValueFactory("name"));
+        col2.setPrefWidth(100);
+        
+        TableColumn col5 = new TableColumn("Gender");
+        col5.setCellValueFactory(new PropertyValueFactory("gender"));
+        col5.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("Birthday");
+        col6.setCellValueFactory(new PropertyValueFactory("birthday"));
+        col6.setPrefWidth(100);
+        
+        TableColumn col7 = new TableColumn("TotalBook");
+        col7.setCellValueFactory(new PropertyValueFactory("totalBookLended"));
+        col7.setPrefWidth(100);
+        
+        TableColumn col8 = new TableColumn("LendingTicketID");
+        col8.setCellValueFactory(new PropertyValueFactory("lendingTicketID"));
+        col8.setPrefWidth(100);
+        
+        this.tbTraSachAccount.getColumns().addAll(col1, col2, col5, col6, col7, col8);
+    }
+    
+    public void bindingtbTraSachAccount (MouseEvent evt) throws SQLException{
+        Account acc = tbTraSachAccount.getSelectionModel().getSelectedItem();  
+        
+        this.tbTraSachLendingDetail.setItems(FXCollections.observableList(lds.getTraSachLendingDetail(acc.getLendingTicketID())));
+        txtTraSachChonDocGia.setText(acc.getName());
+        txtTraSachMaDocGia.setText("" + acc.getId());
+        txtTraSachMaPhieuMuon.setText("" + acc.getLendingTicketID());
+    }
+    
+    private void generateTableTraSachLendingDetail (){
+        TableColumn col1 = new TableColumn("DueDate");
+        col1.setCellValueFactory(new PropertyValueFactory("dueDate"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col5 = new TableColumn("Amount");
+        col5.setCellValueFactory(new PropertyValueFactory("amount"));
+        col5.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("BookID");
+        col6.setCellValueFactory(new PropertyValueFactory("bookID"));
+        col6.setPrefWidth(100);
+        
+        TableColumn col7 = new TableColumn("LendingID");
+        col7.setCellValueFactory(new PropertyValueFactory("lendingID"));
+        col7.setPrefWidth(100);
+        
+        
+        this.tbTraSachLendingDetail.getColumns().addAll(col1, col5, col6, col7);
+    }
 }

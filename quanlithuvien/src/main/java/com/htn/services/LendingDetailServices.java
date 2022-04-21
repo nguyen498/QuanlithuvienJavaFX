@@ -4,6 +4,7 @@
  */
 package com.htn.services;
 
+import com.htn.pojo.Account;
 import com.htn.pojo.Constants;
 import com.htn.pojo.LendingDetail;
 import com.htn.pojo.LendingStatus;
@@ -14,8 +15,11 @@ import com.htn.utils.Utils;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import javafx.scene.control.Alert;
 
 /**
@@ -44,6 +48,33 @@ public class LendingDetailServices {
         }
         return true;
     }
+    
+    public List<LendingDetail> getTraSachLendingDetail (int lendingTicketID) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql =  "SELECT * \n" +
+                                "FROM librarydb.lending_detail\n" +
+                                "WHERE lendingID = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            
+            stm.setInt(1, lendingTicketID);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<LendingDetail> lendingDetails = new ArrayList<>();
+
+            while (rs.next()) {
+                LendingDetail ld = new LendingDetail(rs);
+                
+                lendingDetails.add(ld);
+            }
+            
+         return lendingDetails;
+         }
+    }
+    
+    
+    
+    
     
     /*
         Hàm cho mượn sách 
@@ -76,15 +107,28 @@ public class LendingDetailServices {
         */
 
         // Tạo phiếu mượn (LendingTicket) cho người dùng nếu chưa có
-        LendingTicket lt = new LendingTicket(0, Utils.getCurrentDate(), LendingStatus.BORROWING.toInt(), accountID);
         
-        int lendingTicketID = lts.addLendingTicket(lt);
-                
+        LendingTicket accountLendingTicket = lts.getLendingTicketByAccountID(accountID);
+        int lendingTicketID = -1;
+        // Nếu tìm không thấy lendingticket của account đó => Tạo mới
+        // Nếu lendingTicket.status = returned => Tạo mới
+        // Nếu lendingTicket.status = BORROWING => Không tạo ticket
+        if (accountLendingTicket == null) {
+            LendingTicket lt = new LendingTicket(0, Utils.getCurrentDate(), LendingStatus.BORROWING.toInt(), accountID);
+            lendingTicketID = lts.addLendingTicket(lt);
+            
+        } else if (accountLendingTicket.getStatus() == LendingStatus.RETURNED.toInt()) {
+            LendingTicket lt = new LendingTicket(0, Utils.getCurrentDate(), LendingStatus.BORROWING.toInt(), accountID);
+            lendingTicketID = lts.addLendingTicket(lt);
+        } else {
+            lendingTicketID = accountLendingTicket.getId();
+        }
+        
         // ngày đáo hạn
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, 30);
-        
         Date dueDate = Utils.toSqlDate(Utils.xuatNgayThangNam2(calendar.getTime()));
+        
         // Giá tiền sách
         double bookPrice = bs.getBookByID(bookID).getPrice();
                 
@@ -94,12 +138,16 @@ public class LendingDetailServices {
             return false;
         
         // Tạo hóa đơn mượn sách, thất bại thì trả về false
-//        PaymentServices ps = new PaymentServices();
-//        if (ps.checkout(bookID, cardID) == false) 
-//            return false;
+        // PaymentServices ps = new PaymentServices();
+        // if (ps.checkout(bookID, cardID) == false) 
+        //     return false;
 
         // Tăng tổng số lượng sách đã mượn lên 1 
         lts.incrementTotalBooksLended(lendingTicketID);
         return true;
   }
+    
+    
+    
+    
 }

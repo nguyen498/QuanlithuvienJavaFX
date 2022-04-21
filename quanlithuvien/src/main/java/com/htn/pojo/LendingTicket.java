@@ -39,11 +39,20 @@ public class LendingTicket {
     }
     
     public LendingTicket(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
         this.totalBookLended = rs.getInt("totalBookLended");
         this.dateLending = rs.getDate("dateLending");
         this.status = rs.getInt("status");
         this.accountID = rs.getInt("accountID");
     }
+    
+//    public LendingTicket(ResultSet rs) throws SQLException {
+//        this.id = rs.getInt("id");
+//        this.totalBookLended = rs.getInt("totalBookLended");
+//        this.dateLending = rs.getDate("dateLending");
+//        this.status = rs.getInt("status");
+//        this.accountID = rs.getInt("accountID");
+//    }
 
     /**
      * @return the id

@@ -242,6 +242,7 @@ public class ManagerGUIController implements Initializable {
             Book b = new Book (name, des, price, dateOfPurcharse, publicationPlace, status);
             if (s.addBook(b) == true) {
                 Utils.showBox("Add successful!", Alert.AlertType.INFORMATION).show();
+                
                 this.loadDataBook(null);
             } else {
                  Utils.showBox("Add failed!", Alert.AlertType.WARNING).show();
