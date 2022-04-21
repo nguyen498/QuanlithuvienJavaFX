@@ -5,6 +5,8 @@
 package com.htn.pojo;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -29,6 +31,13 @@ public class LendingDetail {
         this.amount = amount;
         this.bookID = bookID;
         this.lendingID = lendingID;
+    }
+    
+    public LendingDetail(ResultSet rs) throws SQLException {
+        this.dueDate = rs.getDate("dueDate");
+        this.amount = rs.getDouble("amount");
+        this.bookID = rs.getInt("bookID");
+        this.lendingID = rs.getInt("lendingID");
     }
 
     /**

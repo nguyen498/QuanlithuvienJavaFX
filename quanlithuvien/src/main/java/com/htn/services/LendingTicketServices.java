@@ -32,6 +32,7 @@ public class LendingTicketServices {
             ResultSet rs = stm.getGeneratedKeys();  
             int key = rs.next() ? rs.getInt(1) : 0;
            
+            System.err.println(key);
 
             conn.commit();
             return key;
@@ -64,6 +65,43 @@ public class LendingTicketServices {
             return null;
         }
     }
+    
+    
+    public LendingTicket getLendingTicketByAccountID (int accountID) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM lendingticket WHERE accountID = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            
+            stm.setInt(1, accountID);
+
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                LendingTicket lt = new LendingTicket(rs);
+                return lt;
+            }
+            
+            return null;
+        }
+    }
+    
+    public LendingTicket getLendingTicketByAccountID2 (int accountID) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            PreparedStatement stm = conn.prepareStatement("SELECT * FROM lendingticket WHERE accountID = ?");
+            stm.setInt(1, accountID);
+
+            ResultSet rs = stm.executeQuery();
+
+            LendingTicket q = null;
+            if (rs.next()) {
+                q = new LendingTicket();
+                q.setId(rs.getInt("id"));
+            }
+
+            return q;
+        }
+    }
+    
     
     /*
         Tăng tổng số lượng sách đã mượn lên 1 

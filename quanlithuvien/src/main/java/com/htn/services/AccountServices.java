@@ -115,4 +115,35 @@ public class AccountServices {
     }
     
     
+    
+    public List<Account> getTraSachAccount (String kw) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String saccountl = "SELECT account.id, account.name, account.gender, account.birthdate, lendingticket.id, lendingticket.totalBookLended\n" +
+                        "FROM librarydb.account, librarydb.lendingticket\n" +
+                        "WHERE account.id = lendingticket.accountID AND lendingticket.status = 1 AND name like concat ('%',?,'%');";
+            PreparedStatement stm = conn.prepareStatement(saccountl);
+            
+            if (kw == null)
+                kw = "";
+            
+            stm.setString(1, kw);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<Account> accounts = new ArrayList<>();
+
+            while (rs.next()) {
+                Account account = new Account();
+                account.setId(rs.getInt("id"));
+                account.setName(rs.getString("name"));
+                account.setGender(rs.getString("gender"));
+                account.setBirthday(rs.getDate("birthdate"));
+                account.setLendingTicketID(rs.getInt("lendingticket.id"));
+                account.setTotalBookLended(rs.getInt("lendingticket.totalBookLended"));
+                accounts.add(account);
+            }
+         return accounts;
+         }
+    }
+    
 }

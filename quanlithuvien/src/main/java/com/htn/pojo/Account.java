@@ -20,9 +20,18 @@ public class Account {
     private String gender;
     private Date birthday;
     private int accountType;
+    private int lendingTicketID;
+    private int totalBookLended;
 
     public Account() {
     }
+
+    @Override
+    public String toString() {
+        return super.toString(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+    
 
     public Account(int id, String name, String password, String username, String gender, Date birthday, int accountType) {
         this.id = id;
@@ -41,6 +50,15 @@ public class Account {
         this.gender = gender;
         this.birthday = birthday;
         this.accountType = accountType;
+    }
+    
+    public Account(int id, String name, String gender, Date birthday, int lendingTicketID, int totalBookLended) {
+        this.id = id;
+        this.name = name;
+        this.gender = gender;
+        this.birthday = birthday;
+        this.lendingTicketID = lendingTicketID;
+        this.totalBookLended = totalBookLended;
     }
     
     public Account(ResultSet rs) throws SQLException {
@@ -149,6 +167,34 @@ public class Account {
      */
     public void setType(int accountType) {
         this.accountType = accountType;
+    }
+
+    /**
+     * @return the lendingTicketID
+     */
+    public int getLendingTicketID() {
+        return lendingTicketID;
+    }
+
+    /**
+     * @param lendingTicketID the lendingTicketID to set
+     */
+    public void setLendingTicketID(int lendingTicketID) {
+        this.lendingTicketID = lendingTicketID;
+    }
+
+    /**
+     * @return the totalBookLended
+     */
+    public int getTotalBookLended() {
+        return totalBookLended;
+    }
+
+    /**
+     * @param totalBookLended the totalBookLended to set
+     */
+    public void setTotalBookLended(int totalBookLended) {
+        this.totalBookLended = totalBookLended;
     }
     
 }
