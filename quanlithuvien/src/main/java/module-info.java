@@ -7,4 +7,5 @@ module com.htn.quanlithuvien {
     opens com.htn.quanlithuvien to javafx.fxml;
     exports com.htn.quanlithuvien;
     exports com.htn.pojo;
+    exports com.htn.services;
 }
