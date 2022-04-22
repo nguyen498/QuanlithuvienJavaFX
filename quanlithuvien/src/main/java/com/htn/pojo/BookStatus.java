@@ -8,7 +8,12 @@ package com.htn.pojo;
  *
  * @author Administrator
  */
-public class LendingStatus {
-    public static final int RETURNED = 0;
-    public static final int BORROWING = 1;
+public class BookStatus {
+    public static final int UNAVAILABLE = 0;
+    
+    public static final int AVAILABLE = 1;
+
+    public static final int BORROWED = 2;
+    
+    public static final int RESERVED = 3;
 }

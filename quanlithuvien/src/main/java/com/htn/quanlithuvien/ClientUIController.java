@@ -7,13 +7,17 @@ package com.htn.quanlithuvien;
 import com.htn.pojo.LendingDetail;
 import com.htn.pojo.Account;
 import com.htn.pojo.Book;
+import com.htn.pojo.BookStatus;
+import com.htn.pojo.Payment;
 import com.htn.services.AccountServices;
 import com.htn.services.BookServices;
 import com.htn.services.LendingDetailServices;
+import com.htn.services.PaymentServices;
 import com.htn.utils.Utils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,7 +53,8 @@ public class ClientUIController implements Initializable {
     private static final BookServices s = new BookServices();
     private static final AccountServices a = new AccountServices();
     private static final LendingDetailServices lds = new LendingDetailServices();
-    
+    private static final PaymentServices ps = new PaymentServices();
+
     // Book Table
     @FXML 
     private TableView <Book> tbBook;
@@ -133,7 +138,7 @@ public class ClientUIController implements Initializable {
     
     
     
-//    Table Trả Sách
+    // Trả Sách
     @FXML
     private TableView<Account> tbTraSachAccount;
     
@@ -142,12 +147,21 @@ public class ClientUIController implements Initializable {
     
     @FXML
     private TextField txtTraSachChonDocGia;
+    
     @FXML
     private TextField txtTraSachMaDocGia;
-//    @FXML
-//    private TextField txtTraSachSoLuongMuon;
+
     @FXML
     private TextField txtTraSachMaPhieuMuon;
+    
+     @FXML
+    private TextField txtTraSachTotalBookPrice;
+
+    @FXML
+    private TextField txtTraSachTotalFine;
+
+    @FXML
+    private TextField txtTraSachTotalPayment;
     
     
     
@@ -181,10 +195,10 @@ public class ClientUIController implements Initializable {
         // Book Table
         loadDataBook(null);
             
-        //Account Table
+        // Account Table
         loadDataAccount(null);
         
-        //Account Table
+        // TraSach Account Table
         loadtbTraSachAccountData(null);
     }
     
@@ -246,8 +260,8 @@ public class ClientUIController implements Initializable {
     public void bindingBook (MouseEvent evt){
         Book b = tbBook.getSelectionModel().getSelectedItem();  
         // Nếu status sách == 0 thì xuất thông báo k cho mượn
-        if(b != null && b.getStatus() == 0){
-            Utils.showBox("Hiện tại sách này không cho mượn, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+        if(b != null && b.getStatus() != BookStatus.AVAILABLE){
+            Utils.showBox("Hiện tại sách này đã có người mượn, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
         }
         else {
             txtChonSach.setText(b.getName());
@@ -374,16 +388,7 @@ public class ClientUIController implements Initializable {
     }
     
     
-    public void handleLendingBtn (ActionEvent event) throws IOException, SQLException {
-        int bookID = Integer.parseInt(txtBookID.getText());
-        int accountID = Integer.parseInt(txtAccountID.getText());
-        int numberBookLending = Integer.parseInt(txtTotalBookLending.getText());
-        
-        if (lds.lendingBook(bookID, accountID, numberBookLending) == true)
-            Utils.showBox("Mượn sách thành công", Alert.AlertType.CONFIRMATION).show();
-        else
-            Utils.showBox("Có lỗi xảy ra ", Alert.AlertType.ERROR).show();
-    }
+    
    
     
     
@@ -424,26 +429,39 @@ public class ClientUIController implements Initializable {
         this.tbTraSachAccount.getColumns().addAll(col1, col2, col5, col6, col7, col8);
     }
     
-    public void bindingtbTraSachAccount (MouseEvent evt) throws SQLException{
+    public void bindingtbTraSachAccount (MouseEvent evt) throws SQLException, ParseException{
         Account acc = tbTraSachAccount.getSelectionModel().getSelectedItem();  
         
+        // Binding tbTraSachLendingDetail 
         this.tbTraSachLendingDetail.setItems(FXCollections.observableList(lds.getTraSachLendingDetail(acc.getLendingTicketID())));
+        
+        // Biding Payment textField
+        Payment payment = ps.getAccountPaymentInfo(acc.getId());
+        txtTraSachTotalBookPrice.setText("" + payment.getTotalBookPrice());
+        txtTraSachTotalFine.setText("" + payment.getFine());
+        txtTraSachTotalPayment.setText("" + payment.getTotalCheckout());
+                
+        // Binding Account textField
         txtTraSachChonDocGia.setText(acc.getName());
         txtTraSachMaDocGia.setText("" + acc.getId());
         txtTraSachMaPhieuMuon.setText("" + acc.getLendingTicketID());
     }
     
     private void generateTableTraSachLendingDetail (){
-        TableColumn col1 = new TableColumn("DueDate");
-        col1.setCellValueFactory(new PropertyValueFactory("dueDate"));
-        col1.setPrefWidth(50);
+        TableColumn col1 = new TableColumn("BookName");
+        col1.setCellValueFactory(new PropertyValueFactory("bookName"));
+        col1.setPrefWidth(100);
         
-        TableColumn col5 = new TableColumn("Amount");
-        col5.setCellValueFactory(new PropertyValueFactory("amount"));
-        col5.setPrefWidth(100);
+        TableColumn col2 = new TableColumn("Amount");
+        col2.setCellValueFactory(new PropertyValueFactory("amount"));
+        col2.setPrefWidth(50);
         
-        TableColumn col6 = new TableColumn("BookID");
-        col6.setCellValueFactory(new PropertyValueFactory("bookID"));
+        TableColumn col3 = new TableColumn("DueDate");
+        col3.setCellValueFactory(new PropertyValueFactory("dueDate"));
+        col3.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("Date Lending");
+        col6.setCellValueFactory(new PropertyValueFactory("dateLending"));
         col6.setPrefWidth(100);
         
         TableColumn col7 = new TableColumn("LendingID");
@@ -451,6 +469,32 @@ public class ClientUIController implements Initializable {
         col7.setPrefWidth(100);
         
         
-        this.tbTraSachLendingDetail.getColumns().addAll(col1, col5, col6, col7);
+        this.tbTraSachLendingDetail.getColumns().addAll(col1, col2, col3, col6, col7);
+    }
+    
+    public void handleLendingBtn (ActionEvent event) throws IOException, SQLException {
+        int bookID = Integer.parseInt(txtBookID.getText());
+        int accountID = Integer.parseInt(txtAccountID.getText());
+        int numberBookLending = Integer.parseInt(txtTotalBookLending.getText());
+        
+        if (lds.lendingBook(bookID, accountID, numberBookLending) == true) {
+            Utils.showBox("Mượn sách thành công", Alert.AlertType.CONFIRMATION).show();
+            loadDataBook(null);
+        } else {
+            Utils.showBox("Có lỗi xảy ra ", Alert.AlertType.ERROR).show();
+        }
+            
+    }
+    
+    public void handleReturnBookBtn (ActionEvent event) throws IOException, SQLException, ParseException {
+        int lendingTicketID = Integer.parseInt(txtTraSachMaPhieuMuon.getText());
+        int accountID = Integer.parseInt(txtTraSachMaDocGia.getText());
+        
+        if (lds.returnBook(accountID, lendingTicketID) == true) {
+            Utils.showBox("Trả sách thành công", Alert.AlertType.CONFIRMATION).show();
+            loadtbTraSachAccountData(null);
+        } else {
+            Utils.showBox("Có lỗi xảy ra ", Alert.AlertType.ERROR).show();
+        }
     }
 }

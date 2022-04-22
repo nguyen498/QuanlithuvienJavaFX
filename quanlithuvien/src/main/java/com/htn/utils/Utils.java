@@ -26,13 +26,10 @@ public class Utils {
     }
     
     public static Date upDownDate(Date date, int number) {
-        Calendar c = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, number);
         
-        c.setTime(date);
-        
-        c.roll(Calendar.DATE, number);
-        
-        return toSqlDateHyphenVersion(c.toString());
+        return Utils.toSqlDate(Utils.xuatNgayThangNam2(calendar.getTime()));
     }
     
     
@@ -41,6 +38,13 @@ public class Utils {
         
         return toSqlDateHyphenVersion(lcd.toString());
     }
+    
+    public static Date getCurrentDate2() {
+        Calendar calendar = Calendar.getInstance();
+        
+        return Utils.toSqlDate(Utils.xuatNgayThangNam2(calendar.getTime()));
+    }
+  
     
     
     public static Date toSqlDate(String ntn) {
@@ -88,6 +92,33 @@ public class Utils {
             return formatter.format(ntn);
         }else
             return "n/a";
+    }
+    
+    public static long findDateDifference(String startDate, String endDate) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        java.util.Date d1 = sdf.parse(startDate);
+        java.util.Date d2 = sdf.parse(endDate);
+  
+        // Calucalte time difference
+        // in milliseconds
+        long difference_In_Time = d2.getTime() - d1.getTime();
+        
+        
+        // Calucalte time difference in
+        // seconds, minutes, hours, years,
+        // and days
+        long difference_In_Seconds = (difference_In_Time / 1000) % 60;
+
+        long difference_In_Minutes = (difference_In_Time / (1000 * 60)) % 60;
+
+        long difference_In_Hours = (difference_In_Time / (1000 * 60 * 60)) % 24;
+
+        long difference_In_Years = (difference_In_Time / (1000l * 60 * 60 * 24 * 365));
+
+        long difference_In_Days = (difference_In_Time / (1000 * 60 * 60 * 24)) % 365;
+        
+        return difference_In_Days;
     }
     
 }

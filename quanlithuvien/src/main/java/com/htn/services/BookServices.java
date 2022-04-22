@@ -99,6 +99,21 @@ public class BookServices {
         return true;
     }
     
+    public boolean updateBookStatus (int bookID, int status) throws SQLException{
+        String sql = "UPDATE book SET status = ? WHERE id in (?);";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, status);
+                stm.setInt(2, bookID);
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
+    
     public boolean deleteBook (int i) throws SQLException{
         String sql = "DELETE FROM book WHERE id =?";
         try (Connection conn = JdbcUtils.getConn()) {

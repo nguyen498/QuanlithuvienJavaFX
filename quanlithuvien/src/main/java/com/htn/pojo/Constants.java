@@ -13,12 +13,8 @@ public class Constants {
     public static final int MAX_BOOKS_LENDING_TO_A_USER = 5;
     // Số ngày cho mượn tối đa  
     public static final int MAX_LENDING_DAYS = 30;
-
-    public static int MAX_BOOKS_LENDING_TO_A_USER() {
-        return MAX_BOOKS_LENDING_TO_A_USER;
-    }
-
-    public static int MAX_LENDING_DAYS() {
-        return MAX_LENDING_DAYS;
-    }
+    // Số ngày cho đặt tối đa  
+    public static final int MAX_RESERVATION_DAYS = 2;
+    // Số tiền phạt khi trả trễ 1 ngày
+    public static final int FINE_IN_1_DAY = 5000;
 }

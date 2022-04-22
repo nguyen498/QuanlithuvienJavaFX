@@ -8,4 +8,5 @@ module com.htn.quanlithuvien {
     exports com.htn.quanlithuvien;
     exports com.htn.pojo;
     exports com.htn.services;
+    exports com.htn.utils;
 }
