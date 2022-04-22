@@ -4,6 +4,7 @@
  */
 package com.htn.services;
 
+import com.htn.pojo.LendingStatus;
 import com.htn.utils.JdbcUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,6 +86,25 @@ public class LendingTicketServices {
         }
     }
     
+    public LendingTicket getBorrowingLendingTicketByAccountID (int accountID) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM lendingticket WHERE accountID = ? AND status = ?";
+            PreparedStatement stm = conn.prepareStatement(sql);
+            
+            stm.setInt(1, accountID);
+            stm.setInt(2, LendingStatus.BORROWING);
+
+            ResultSet rs = stm.executeQuery();
+            
+            if (rs.next()) {
+                LendingTicket lt = new LendingTicket(rs);
+                return lt;
+            }
+            
+            return null;
+        }
+    }
+    
     public LendingTicket getLendingTicketByAccountID2 (int accountID) throws SQLException{
         try (Connection conn = JdbcUtils.getConn()) {
             PreparedStatement stm = conn.prepareStatement("SELECT * FROM lendingticket WHERE accountID = ?");
@@ -106,7 +126,7 @@ public class LendingTicketServices {
     /*
         Tăng tổng số lượng sách đã mượn lên 1 
     */
-    public void incrementTotalBooksLended (int lendingTicketID) throws SQLException{
+    public boolean incrementTotalBooksLended (int lendingTicketID) throws SQLException{
         LendingTicket lt = this.getLendingTicketByID(lendingTicketID);
         
         String sql = "UPDATE lendingticket SET totalBookLended = ? WHERE id in (?);";
@@ -119,6 +139,24 @@ public class LendingTicketServices {
             stm.executeUpdate();
 
             conn.commit();
+            
+            return true;
         }
+        
+    }
+    
+    public boolean updateLendingTicketStatus (int lendingTicketID, int status) throws SQLException{
+        String sql = "UPDATE lendingticket SET status = ? WHERE id in (?);";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, status);
+                stm.setInt(2, lendingTicketID);
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
     }
 }

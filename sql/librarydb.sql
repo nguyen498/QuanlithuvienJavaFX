@@ -31,7 +31,7 @@ CREATE TABLE `account` (
   `birthdate` datetime NOT NULL,
   `accountType` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'Hà Trường Nguyên','123456','nguyen498','Nam','2001-05-20 00:00:00',0),(3,'admin','123','admin','Nam','2001-05-20 00:00:00',0);
+INSERT INTO `account` VALUES (1,'Hà Trường Nguyên','123456','nguyen498','Nam','2001-05-20 00:00:00',0),(3,'admin','123','admin','Nam','2001-05-20 00:00:00',0),(7,'user','user','123','Khác','2222-01-12 00:00:00',1);
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -118,7 +118,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',1),(6,'Sach xin','Đây Là Quyển Sách',50000,'2021-02-23 00:00:00','HN',1),(7,'Sách Không Xịn','Đây là sách không xịn',2000,'2111-11-01 00:00:00','HN',1);
+INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',1),(6,'Sach xin','Đây Là Quyển Sách',50000,'2021-02-23 00:00:00','HN',1),(7,'Sách Không Xịn','Đây là sách không xịn',2000,'2111-11-01 00:00:00','HN',2);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,7 +197,7 @@ CREATE TABLE `lending_detail` (
 
 LOCK TABLES `lending_detail` WRITE;
 /*!40000 ALTER TABLE `lending_detail` DISABLE KEYS */;
-INSERT INTO `lending_detail` VALUES ('2022-05-21 00:00:00',200,5,20),('2022-05-21 00:00:00',50000,6,20),('2022-05-21 00:00:00',2000,7,19),('2022-05-21 00:00:00',2000,7,20);
+INSERT INTO `lending_detail` VALUES ('2022-05-22 00:00:00',200,5,28),('2022-05-22 00:00:00',50000,6,27),('2022-05-22 00:00:00',50000,6,28),('2022-05-22 00:00:00',2000,7,27),('2022-03-22 00:00:00',2000,7,29);
 /*!40000 ALTER TABLE `lending_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,7 +217,7 @@ CREATE TABLE `lendingticket` (
   PRIMARY KEY (`id`),
   KEY `accountID` (`accountID`),
   CONSTRAINT `lendingticket_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,7 +226,7 @@ CREATE TABLE `lendingticket` (
 
 LOCK TABLES `lendingticket` WRITE;
 /*!40000 ALTER TABLE `lendingticket` DISABLE KEYS */;
-INSERT INTO `lendingticket` VALUES (19,'0026-10-13 00:00:00',1,1,1),(20,'0026-10-13 00:00:00',3,3,1);
+INSERT INTO `lendingticket` VALUES (27,'2022-04-22 00:00:00',1,7,0),(28,'2022-04-22 00:00:00',2,1,0),(29,'2022-04-22 00:00:00',1,7,1);
 /*!40000 ALTER TABLE `lendingticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,7 +266,8 @@ DROP TABLE IF EXISTS `payment`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `payment` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `total` float NOT NULL DEFAULT '0',
+  `totalCheckout` float NOT NULL DEFAULT '0',
+  `totalBookPrice` float NOT NULL DEFAULT '0',
   `fine` float NOT NULL DEFAULT '0',
   `createdDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `accountID` int NOT NULL,
@@ -276,7 +277,7 @@ CREATE TABLE `payment` (
   KEY `lendingID` (`lendingID`),
   CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `account` (`id`),
   CONSTRAINT `payment_ibfk_2` FOREIGN KEY (`lendingID`) REFERENCES `lendingticket` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -285,6 +286,7 @@ CREATE TABLE `payment` (
 
 LOCK TABLES `payment` WRITE;
 /*!40000 ALTER TABLE `payment` DISABLE KEYS */;
+INSERT INTO `payment` VALUES (6,52000,52000,0,'2022-04-22 00:00:00',7,27),(7,52000,52000,0,'2022-04-22 00:00:00',7,27),(8,50200,50200,0,'2022-04-22 00:00:00',1,28);
 /*!40000 ALTER TABLE `payment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,4 +354,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-21 17:21:34
+-- Dump completed on 2022-04-22 11:53:49

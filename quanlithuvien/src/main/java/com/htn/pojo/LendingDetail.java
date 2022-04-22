@@ -22,8 +22,20 @@ public class LendingDetail {
     private int bookID;
 
     private int lendingID;
+    
+    private String bookName;
+    private Date dateLending;
+    
 
     public LendingDetail() {
+    }
+    
+    public LendingDetail(String bookName, double amount, Date dueDate, Date dateLending, int lendingID) {
+        this.bookName = bookName;
+        this.amount = amount;
+        this.dueDate = dueDate;
+        this.dateLending = dateLending;
+        this.lendingID = lendingID;
     }
 
     public LendingDetail(Date dueDate, double amount, int bookID, int lendingID) {
@@ -94,6 +106,34 @@ public class LendingDetail {
      */
     public void setLendingID(int lendingID) {
         this.lendingID = lendingID;
+    }
+
+    /**
+     * @return the bookName
+     */
+    public String getBookName() {
+        return bookName;
+    }
+
+    /**
+     * @param bookName the bookName to set
+     */
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    /**
+     * @return the dateLending
+     */
+    public Date getDateLending() {
+        return dateLending;
+    }
+
+    /**
+     * @param dateLending the dateLending to set
+     */
+    public void setDateLending(Date dateLending) {
+        this.dateLending = dateLending;
     }
     
     

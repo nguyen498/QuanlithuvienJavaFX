@@ -355,8 +355,8 @@ public class ManagerGUIController implements Initializable {
         col6.setPrefWidth(100);
         
         TableColumn col7 = new TableColumn("Type");
-        col6.setCellValueFactory(new PropertyValueFactory("type"));
-        col6.setPrefWidth(100);
+        col7.setCellValueFactory(new PropertyValueFactory("type"));
+        col7.setPrefWidth(100);
         
         this.tbAccount.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
     }
@@ -370,10 +370,10 @@ public class ManagerGUIController implements Initializable {
         txtPassword.setText("" + a.getPassword());
         txtbirthdate.setText("" + Utils.xuatNgayThangNam(a.getBirthday()));
         cbGender.setValue("" + a.getGender());
-        if(a.getType()== AccountType.ADMIN.toInt()){
+        if(a.getType()== AccountType.ADMIN){
             cbAccountType.setValue("Admin");
         }
-        else if(a.getType() == AccountType.STUDENT.toInt()){
+        else if(a.getType() == AccountType.STUDENT){
             cbAccountType.setValue("Student");
         }
     }

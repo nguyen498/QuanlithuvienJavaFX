@@ -65,10 +65,10 @@ public class LoginController implements Initializable {
                     Account account = new Account(rs);
                     // Is Admin
                     int accountType = account.getType();
-                    if (accountType == AccountType.ADMIN.toInt()) 
+                    if (accountType == AccountType.ADMIN) 
                         showClientUI();
                     // Is User
-                    else if (accountType == AccountType.STUDENT.toInt())
+                    else if (accountType == AccountType.STUDENT)
                         Utils.showBox("Bạn không đủ quyền truy cập!", Alert.AlertType.ERROR).show();
                     
                 } else {

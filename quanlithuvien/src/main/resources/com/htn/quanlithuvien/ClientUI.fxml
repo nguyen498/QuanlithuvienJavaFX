@@ -132,9 +132,11 @@
             </GridPane>
          </children>
       </GridPane>
-      <GridPane fx:id="gpGroupTextBoxTraSach" layoutX="216.0" layoutY="129.0" prefHeight="199.0" prefWidth="504.0">
+      <GridPane fx:id="gpGroupTextBoxTraSach" layoutX="216.0" layoutY="129.0" prefHeight="199.0" prefWidth="538.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.6666259765625" minWidth="10.0" prefWidth="316.6666259765625" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.6666259765625" minWidth="10.0" prefWidth="267.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.6666259765625" minWidth="0.0" prefWidth="38.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="336.0" minWidth="10.0" prefWidth="248.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="74.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
@@ -165,20 +167,55 @@
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="txtTraSachMaDocGia" layoutX="105.0" layoutY="25.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label text="Mã Phiếu mượn" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                  <Label text="Mã Phiếu mượn" GridPane.rowIndex="2">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
                      <GridPane.margin>
-                        <Insets />
+                        <Insets left="10.0" />
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="txtTraSachMaPhieuMuon" layoutX="117.0" layoutY="107.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
+            <Label text="Hóa Đơn" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <GridPane prefWidth="249.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="107.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.0" minWidth="10.0" prefWidth="148.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="55.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="108.0" minHeight="0.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="145.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Phí Mượn Sách">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtTraSachTotalBookPrice" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" />
+                  <Label layoutX="20.0" layoutY="29.0" text="Tiền Phạt" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtTraSachTotalFine" layoutX="105.0" layoutY="25.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Tổng Tiền" GridPane.rowIndex="2">
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <GridPane.margin>
+                        <Insets left="10.0" />
+                     </GridPane.margin>
+                  </Label>
+                  <TextField fx:id="txtTraSachTotalPayment" layoutX="117.0" layoutY="107.0" prefHeight="25.0" prefWidth="135.0" style="-fx-border-color: #3F2B63; -fx-background-color: #fff;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
          </children>
       </GridPane>
-      <GridPane layoutX="767.0" layoutY="149.0" prefHeight="179.0" prefWidth="119.0">
+      <GridPane layoutX="806.0" layoutY="149.0" prefHeight="179.0" prefWidth="119.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
          </columnConstraints>
@@ -188,7 +225,7 @@
          </rowConstraints>
          <children>
             <Button fx:id="btnLending" mnemonicParsing="false" onAction="#handleLendingBtn" prefHeight="53.0" prefWidth="119.0" text="Cho Mượn" textFill="WHITE" />
-            <Button fx:id="btnTraSach" mnemonicParsing="false" opacity="0.0" prefHeight="53.0" prefWidth="119.0" text="Trả Sách" textFill="WHITE" />
+            <Button fx:id="btnTraSach" mnemonicParsing="false" onAction="#handleReturnBookBtn" opacity="0.0" prefHeight="53.0" prefWidth="119.0" text="Trả Sách" textFill="WHITE" />
             <Button fx:id="btnExit" mnemonicParsing="false" onAction="#handleClose" prefHeight="53.0" prefWidth="119.0" text="Kết Thúc" textFill="WHITE" GridPane.rowIndex="1" />
          </children>
       </GridPane>
@@ -289,8 +326,6 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                         </TableView>
-                        <TextField fx:id="txtSearchAccount1" style="-fx-border-color: #3f2B63; -fx-background-color: #fff;" />
-                        <Button fx:id="btnSearchAccount1" mnemonicParsing="false" text="Search" textFill="WHITE" GridPane.halignment="RIGHT" />
                      </children>
                   </GridPane>
                </children>

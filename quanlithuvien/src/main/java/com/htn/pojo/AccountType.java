@@ -8,16 +8,8 @@ package com.htn.pojo;
  *
  * @author Administrator
  */
-public enum AccountType {
-    ADMIN(0), STUDENT(1);
+public class AccountType {
+    public static final int ADMIN = 0;
 
-    private final int numType;
-
-    AccountType(int numType) {
-        this.numType = numType;
-    }
-
-    public int toInt() {
-        return numType;
-    }
+    public static final int STUDENT = 1;
 }

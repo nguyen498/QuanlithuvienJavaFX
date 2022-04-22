@@ -5,12 +5,16 @@
 package com.htn.pojo;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Payment {
 
     private int id;
     
-    private double total;
+    private double totalBookPrice;
+    
+    private double totalCheckout;
 
     private double fine;
 
@@ -23,15 +27,41 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int id, double total, double fine, Date createdDate, int accountID, int lendingID) {
+    public Payment(int id, double totalBookPrice, double totalCheckout, double fine, Date createdDate, int accountID, int lendingID) {
         this.id = id;
-        this.total = total;
+        this.totalBookPrice = totalBookPrice;
+        this.totalCheckout = totalCheckout;
         this.fine = fine;
         this.createdDate = createdDate;
         this.accountID = accountID;
         this.lendingID = lendingID;
     }
+    
+    public Payment(double totalBookPrice, double totalCheckout, double fine, Date createdDate, int accountID, int lendingID) {
+        this.totalBookPrice = totalBookPrice;
+        this.totalCheckout = totalCheckout;
+        this.fine = fine;
+        this.createdDate = createdDate;
+        this.accountID = accountID;
+        this.lendingID = lendingID;
+    }
+    
+    public Payment(double totalBookPrice, double totalCheckout, double fine) {
+        this.totalBookPrice = totalBookPrice;
+        this.totalCheckout = totalCheckout;
+        this.fine = fine;
+    }
 
+    public Payment(ResultSet rs) throws SQLException {
+        this.id = rs.getInt("id");
+        this.totalBookPrice = rs.getDouble("totalBookPrice");
+        this.totalCheckout = rs.getDouble("totalCheckout");
+        this.fine = rs.getDouble("fine");
+        this.createdDate = rs.getDate("createdDate");
+        this.accountID = rs.getInt("accountID");
+        this.lendingID = rs.getInt("lendingID");
+    }
+    
     /**
      * @return the id
      */
@@ -47,17 +77,31 @@ public class Payment {
     }
 
     /**
-     * @return the total
+     * @return the totalBookPrice
      */
-    public double getTotal() {
-        return total;
+    public double getTotalBookPrice() {
+        return totalBookPrice;
     }
 
     /**
-     * @param total the total to set
+     * @param totalBookPrice the totalBookPrice to set
      */
-    public void setTotal(double total) {
-        this.total = total;
+    public void setTotalBookPrice(double totalBookPrice) {
+        this.totalBookPrice = totalBookPrice;
+    }
+
+    /**
+     * @return the totalCheckout
+     */
+    public double getTotalCheckout() {
+        return totalCheckout;
+    }
+
+    /**
+     * @param totalCheckout the totalCheckout to set
+     */
+    public void setTotalCheckout(double totalCheckout) {
+        this.totalCheckout = totalCheckout;
     }
 
     /**
@@ -115,7 +159,7 @@ public class Payment {
     public void setLendingID(int lendingID) {
         this.lendingID = lendingID;
     }
-    
+
     
 
     
