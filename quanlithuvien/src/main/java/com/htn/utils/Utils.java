@@ -85,6 +85,11 @@ public class Utils {
             return "n/a";
     }
     
+
+    public static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+          }
+
     public static String xuatNgayThangNam2(java.util.Date ntn) {
         if (ntn != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -93,6 +98,7 @@ public class Utils {
         }else
             return "n/a";
     }
+
     
     public static long findDateDifference(String startDate, String endDate) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,5 +126,5 @@ public class Utils {
         
         return difference_In_Days;
     }
-    
+
 }
