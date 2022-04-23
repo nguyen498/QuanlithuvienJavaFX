@@ -4,6 +4,7 @@
  */
 package com.htn.services;
 
+import com.htn.pojo.ReservationTicket;
 import com.htn.pojo.Book;
 import com.htn.pojo.Payment;
 import com.htn.pojo.Account;
@@ -12,6 +13,7 @@ import com.htn.pojo.Constants;
 import com.htn.pojo.LendingDetail;
 import com.htn.pojo.LendingStatus;
 import com.htn.pojo.LendingTicket;
+import com.htn.pojo.ReservationStatus;
 import com.htn.utils.JdbcUtils;
 
 import com.htn.utils.Utils;
@@ -118,13 +120,8 @@ public class LendingDetailServices {
     public boolean lendingBook(int bookID, int accountID, int numberBookLending) throws SQLException {
         BookServices bs = new BookServices();
         LendingTicketServices lts = new LendingTicketServices();
+        ReserveTicketServices rs = new ReserveTicketServices();
         
-        // Kiểm trạng thái sách
-        Book book = bs.getBookByID(bookID);
-        if (book.getStatus() != BookStatus.AVAILABLE) {
-            Utils.showBox("Sách này đã có người mượn hoặc đang được bảo dưỡng!!", Alert.AlertType.ERROR).show();
-            return false;
-        }
                 
         // SL Sách đã mượn + SL sách muốn mượn > SL sách cho phép thì k cho mượn
         if ((lts.getTotalBooksLended() + numberBookLending) > Constants.MAX_BOOKS_LENDING_TO_A_USER) {
@@ -132,22 +129,22 @@ public class LendingDetailServices {
             return false;
         }
         
-        /*
-        // Sách đã có người nào đặt chưa ?
-        BookReservation bookReservation = BookReservation.fetchReservationDetails(bs.getBookByID(bookID));
         
-        if (bookReservation != null && bookReservation.getMemberId() != this.getId()) {
-            // Sách đã có người đặt VÀ người đặt không phải là bản thân
-            Utils.showBox("Sách đã bị người khác đặt!!", Alert.AlertType.ERROR).show();
-            return false;
-        } else if (bookReservation != null) {
-            // id của người đặt = id của bản thân, update thông tin đặt sang COMPLETED 
-            // (tức quá trình đặt sách thành công => chuyển sang mượn sách)
-            bookReservation.updateStatus(ReservationStatus.COMPLETED);
-        }
+        /*
+            Tìm trong ReservationTicket bằng bookID với status = RESERVED
+            Nếu có tức là quyển sách đang được đặt bỏi ai đó 
+            => kiểm tra ReservationTicket.accountID có = accountID của người định đặt sách k
+            => Nếu đúng thì cho mượn 
+            => nếu sai thì không cho mượn
         */
-
-       
+        ReservationTicket reservationTicket = rs.getReservingReserveTicketByBookID(bookID);
+        
+        if (reservationTicket != null && reservationTicket.getAccountID() != accountID) {
+            // Sách đã có người đặt VÀ người đặt không phải là bản thân
+            Utils.showBox("Sách đã bị người khác đặt, Vui lòng chọn sách khác!!", Alert.AlertType.ERROR).show();
+            return false;
+        }
+        
         /*
             Nếu tìm lendingTicket với trạng thái BORROWING mà không có => thì tạo mới 
         */
@@ -168,7 +165,10 @@ public class LendingDetailServices {
         // Giá tiền sách
         double bookPrice = bs.getBookByID(bookID).getPrice();
                 
-        // Thêm sách muốn mượn, account, số lượng sách thuê vào Chi Tiết Phiếu mượn (LendingDetail), thất bại thì trả về false
+        /*
+            Thêm sách muốn mượn, account, số lượng sách thuê vào Chi Tiết Phiếu mượn (LendingDetail), 
+            Thất bại thì trả về false
+        */
         LendingDetail ld = new LendingDetail(dueDate, bookPrice, bookID, lendingTicketID);
         if (this.addLendingDetail(ld) == false) {
             Utils.showBox("Xảy ra lỗi trong quá trình thêm chi tiết mượn!!", Alert.AlertType.ERROR).show();
@@ -231,4 +231,5 @@ public class LendingDetailServices {
         
         return true;
     }    
+    
 }
