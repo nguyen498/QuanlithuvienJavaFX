@@ -12,11 +12,30 @@ import java.sql.SQLException;
 import com.htn.pojo.LendingTicket;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Administrator
  */
 public class LendingTicketServices {
+    
+    public List <LendingTicket> getLendingTickets () throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM lendingticket;";
+            PreparedStatement stm = conn.prepareStatement(sql);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<LendingTicket> lts = new ArrayList<>();
+
+            while (rs.next()) {
+                LendingTicket lt = new LendingTicket(rs);
+                lts.add(lt);
+            }
+         return lts;
+         }
+    }
     
     public int addLendingTicket (LendingTicket ltk) throws SQLException{
         String sql = "INSERT INTO lendingticket (dateLending, totalBookLended, status, accountID) " + "VALUES (?, ?, ?, ?)";

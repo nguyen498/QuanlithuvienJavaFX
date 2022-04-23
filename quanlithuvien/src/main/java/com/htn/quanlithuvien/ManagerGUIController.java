@@ -9,12 +9,18 @@ import com.htn.pojo.AccountType;
 import com.htn.pojo.Author;
 import com.htn.pojo.Book;
 import com.htn.pojo.Category;
+import com.htn.pojo.LendingTicket;
 import com.htn.pojo.LibraryCard;
+import com.htn.pojo.Payment;
+import com.htn.pojo.ReservationTicket;
 import com.htn.services.AccountServices;
 import com.htn.services.AuthorServices;
 import com.htn.services.BookServices;
 import com.htn.services.CategoryServices;
+import com.htn.services.LendingTicketServices;
 import com.htn.services.LibraryCardServices;
+import com.htn.services.PaymentServices;
+import com.htn.services.ReserveTicketServices;
 import com.htn.utils.Utils;
 import java.net.URL;
 import java.sql.Date;
@@ -47,6 +53,10 @@ public class ManagerGUIController implements Initializable {
     private static final CategoryServices c = new CategoryServices();
     private static final AuthorServices au = new AuthorServices();
     private static final LibraryCardServices cardServices = new LibraryCardServices();
+    private static final LendingTicketServices lendingTicketServices = new LendingTicketServices();
+    private static final ReserveTicketServices reserveTicketServices = new ReserveTicketServices();
+    private static final PaymentServices paymentServices = new PaymentServices();
+    
     /**
      * Initializes the controller class.
      */
@@ -95,6 +105,18 @@ public class ManagerGUIController implements Initializable {
     
     //region attribute card
     @FXML private TableView <LibraryCard> tbCards;
+    //endregion
+    
+    //region attribute LendingTicket
+    @FXML private TableView <LendingTicket> tbLending;
+    //endregion
+    
+    //region attribute ReservationTicket
+    @FXML private TableView <ReservationTicket> tbReservation;
+    //endregion
+    
+    //region attribute payment
+    @FXML private TableView <Payment> tbPayment;
     //endregion
     
     //Region book manager
@@ -160,6 +182,27 @@ public class ManagerGUIController implements Initializable {
         
         this.loadColumnCard();
         this.loadDataCards(null);
+        
+        this.loadLendingColumn();
+        try {
+            this.loadDataLending();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.loadReserveColumn();
+        try {
+            this.loadDataReservations();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.loadColumnPayment();
+        try {
+            this.loadDataPayment();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
     private void loadDataBook(String kw) {
@@ -276,11 +319,17 @@ public class ManagerGUIController implements Initializable {
         else if(txtPrice.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter Price!", Alert.AlertType.WARNING).show();
         }
+        else if(!Utils.isNumeric(txtPrice.getText())){
+            Utils.showBox("Price isn't number!", Alert.AlertType.WARNING).show();
+        }
         else if(txtDateOfPurcharse.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter DateOfPurcharse!", Alert.AlertType.WARNING).show();
         }
+        else if((Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText()) == null){
+            Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
+        }
         else if(txtPublicationPlace.getText().replaceAll(" ", "").equals("")){
-            Utils.showBox("Not choose PublicationPlace!", Alert.AlertType.WARNING).show();
+            Utils.showBox("Not enter PublicationPlace!", Alert.AlertType.WARNING).show();
         }
         else{
             int id = Integer.parseInt(this.txtId.getText());
@@ -391,6 +440,9 @@ public class ManagerGUIController implements Initializable {
         else if(txtbirthdate.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter birthday!", Alert.AlertType.WARNING).show();
         }
+        else if((Date) Utils.toSqlDate(this.txtbirthdate.getText()) == null){
+            Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
+        }
         else{
             int type = 1;
             String name = this.txtNameAccount.getText();
@@ -429,6 +481,9 @@ public class ManagerGUIController implements Initializable {
         }
         else if(txtbirthdate.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter birthday!", Alert.AlertType.WARNING).show();
+        }
+        else if((Date) Utils.toSqlDate(this.txtbirthdate.getText()) == null){
+            Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
         }
         else{
             int id = Integer.parseInt(this.txtIdAccount.getText());
@@ -643,6 +698,102 @@ public class ManagerGUIController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    //endregion
+    
+    //region lending
+    public void loadLendingColumn (){
+        TableColumn col1 = new TableColumn("ID");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("Total");
+        col2.setCellValueFactory(new PropertyValueFactory("totalBookLended"));
+        col2.setPrefWidth(150);
+        
+        TableColumn col3 = new TableColumn("DateLending");
+        col3.setCellValueFactory(new PropertyValueFactory("dateLending"));
+        col3.setPrefWidth(150);
+        
+        TableColumn col4 = new TableColumn("Status");
+        col4.setCellValueFactory(new PropertyValueFactory("status"));
+        col4.setPrefWidth(50);
+        
+        TableColumn col5 = new TableColumn("AccountID");
+        col5.setCellValueFactory(new PropertyValueFactory("accountID"));
+        col5.setPrefWidth(50);
+        this.tbLending.getColumns().addAll(col1, col2, col3, col4, col5);
+    }
+    
+    public void loadDataLending () throws SQLException{
+        this.tbLending.setItems(FXCollections.observableList(lendingTicketServices.getLendingTickets()));
+    }
+    //endreion
+    
+    //region reservation
+    public void loadReserveColumn (){
+        TableColumn col1 = new TableColumn("ID");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("Total");
+        col2.setCellValueFactory(new PropertyValueFactory("totalBookReserved"));
+        col2.setPrefWidth(150);
+        
+        TableColumn col3 = new TableColumn("DateLending");
+        col3.setCellValueFactory(new PropertyValueFactory("createdDate"));
+        col3.setPrefWidth(150);
+        
+        TableColumn col4 = new TableColumn("Status");
+        col4.setCellValueFactory(new PropertyValueFactory("status"));
+        col4.setPrefWidth(50);
+        
+        TableColumn col5 = new TableColumn("AccountID");
+        col5.setCellValueFactory(new PropertyValueFactory("accountID"));
+        col5.setPrefWidth(50);
+        this.tbReservation.getColumns().addAll(col1, col2, col3, col4, col5);
+    }
+    
+    public void loadDataReservations () throws SQLException{
+        this.tbReservation.setItems(FXCollections.observableList(reserveTicketServices.getReserveTicket()));
+    }
+    //endregion
+    
+    //region payment
+    private void loadColumnPayment (){
+        TableColumn col1 = new TableColumn("Id");
+        col1.setCellValueFactory(new PropertyValueFactory("id"));
+        col1.setPrefWidth(50);
+        
+        TableColumn col2 = new TableColumn("TotalCheckout");
+        col2.setCellValueFactory(new PropertyValueFactory("totalCheckout"));
+        col2.setPrefWidth(150);
+        
+        TableColumn col3 = new TableColumn("TotalCheckout");
+        col3.setCellValueFactory(new PropertyValueFactory("totalCheckout"));
+        col3.setPrefWidth(200);
+        
+        TableColumn col4 = new TableColumn("Fine");
+        col4.setCellValueFactory(new PropertyValueFactory("fine"));
+        col4.setPrefWidth(50);
+        
+        TableColumn col5 = new TableColumn("CreatedDate");
+        col5.setCellValueFactory(new PropertyValueFactory("createdDate"));
+        col5.setPrefWidth(100);
+        
+        TableColumn col6 = new TableColumn("AccountID");
+        col6.setCellValueFactory(new PropertyValueFactory("accountID"));
+        col6.setPrefWidth(100);
+        
+        TableColumn col7 = new TableColumn("LendingID");
+        col7.setCellValueFactory(new PropertyValueFactory("lendingID"));
+        col7.setPrefWidth(50);
+        
+        this.tbPayment.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
+    }
+    
+     public void loadDataPayment () throws SQLException{
+        this.tbPayment.setItems(FXCollections.observableList(paymentServices.getPayment()));
     }
     //endregion
 }
