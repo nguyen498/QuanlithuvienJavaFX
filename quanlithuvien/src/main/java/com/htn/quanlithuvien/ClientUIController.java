@@ -254,7 +254,7 @@ public class ClientUIController implements Initializable {
     
    public void showManagerGUI () throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ManagerGUI.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        Scene scene = new Scene(fxmlLoader.load(), 743, 549);
         Stage stage = new Stage ();
         stage.setScene(scene);
         stage.setTitle("Admin");

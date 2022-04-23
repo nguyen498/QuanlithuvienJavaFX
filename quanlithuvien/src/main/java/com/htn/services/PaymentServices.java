@@ -4,7 +4,6 @@
  */
 package com.htn.services;
 
-import com.htn.pojo.Book;
 import com.htn.pojo.Constants;
 import com.htn.pojo.Payment;
 import com.htn.pojo.LendingDetail;
@@ -12,8 +11,10 @@ import com.htn.utils.JdbcUtils;
 import com.htn.utils.Utils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,22 @@ import java.util.List;
  * @author Administrator
  */
 public class PaymentServices {
+    public List <Payment> getPayment () throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM payment;";
+            PreparedStatement stm = conn.prepareStatement(sql);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<Payment> lts = new ArrayList<>();
+
+            while (rs.next()) {
+                Payment lt = new Payment(rs);
+                lts.add(lt);
+            }
+         return lts;
+         }
+    }
     
     public boolean addPayment (Payment p) throws SQLException{
         String sql = "INSERT INTO payment (totalBookPrice, totalCheckout, fine, createdDate, accountID, lendingID) " + "VALUES (?, ?, ?, ?, ?, ?)";

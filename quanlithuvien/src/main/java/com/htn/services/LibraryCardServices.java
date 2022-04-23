@@ -41,4 +41,19 @@ public class LibraryCardServices {
          return cards;
          }
     }
+    public boolean addLibraryCard (LibraryCard lc) throws SQLException{
+        String sql = "INSERT INTO librarycard (issuedAt, active, account_id) " + "VALUES (?, ?, ?";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setDate(1, lc.getIssuedAt());
+                stm.setInt(2, lc.getActive());
+                stm.setInt(3, lc.getAccountType());
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
 }

@@ -12,11 +12,30 @@ import com.htn.pojo.ReservationStatus;
 import com.htn.pojo.ReservationTicket;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Administrator
  */
 public class ReserveTicketServices {
+    
+    public List <ReservationTicket> getReserveTicket () throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "SELECT * FROM reservationticket;";
+            PreparedStatement stm = conn.prepareStatement(sql);
+
+            ResultSet rs = stm.executeQuery();
+
+            List<ReservationTicket> lts = new ArrayList<>();
+
+            while (rs.next()) {
+                ReservationTicket lt = new ReservationTicket(rs);
+                lts.add(lt);
+            }
+         return lts;
+         }
+    }
     
     public int addReserveTicket (ReservationTicket rt) throws SQLException{
         String sql = "INSERT INTO reservationticket (createdDate, totalBookReserved, status, accountID) " + "VALUES (?, ?, ?, ?)";

@@ -64,6 +64,9 @@ public class SignUpController implements Initializable {
         else if(txtBirthday.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter birthday!", Alert.AlertType.WARNING).show();
         }
+        else if((Date) Utils.toSqlDate(this.txtBirthday.getText()) == null){
+            Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
+        }
         else if(cbGender.getValue().equals("")){
             Utils.showBox("Not choose Gender!", Alert.AlertType.WARNING).show();
         }
