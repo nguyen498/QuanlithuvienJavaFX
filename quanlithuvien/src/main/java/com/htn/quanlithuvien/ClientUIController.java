@@ -13,6 +13,7 @@ import com.htn.services.AccountServices;
 import com.htn.services.BookServices;
 import com.htn.services.LendingDetailServices;
 import com.htn.services.PaymentServices;
+import com.htn.services.ReservationDetailServices;
 import com.htn.utils.Utils;
 import java.io.IOException;
 import java.net.URL;
@@ -53,6 +54,7 @@ public class ClientUIController implements Initializable {
     private static final BookServices s = new BookServices();
     private static final AccountServices a = new AccountServices();
     private static final LendingDetailServices lds = new LendingDetailServices();
+    private static final ReservationDetailServices rds = new ReservationDetailServices();
     private static final PaymentServices ps = new PaymentServices();
 
     // Book Table
@@ -164,6 +166,35 @@ public class ClientUIController implements Initializable {
     private TextField txtTraSachTotalPayment;
     
     
+    // Đặt sách
+    @FXML
+    private Button btnReserve;
+    
+    @FXML
+    private GridPane gpGroupTableDatSach;
+
+    @FXML
+    private GridPane gpGroupTextBoxDatSach;
+    
+    @FXML
+    private TextField txtDSChonDocGia;
+
+    @FXML
+    private TextField txtDSChonSach;
+
+    @FXML
+    private TextField txtDSMaDocGia;
+
+    @FXML
+    private TextField txtDSMaSach;
+    
+    @FXML
+    private TableView<Account> tbDSAccount;
+
+    @FXML
+    private TableView<Book> tbDSBook;
+    
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -171,13 +202,21 @@ public class ClientUIController implements Initializable {
            // Mặc định navigation mượn sách xuất hiện trước
             toggleNavagition("MUONSACH");
 
-            // Book Table
-            generateBookTable();
-            loadDataBook(null);
+            // Muon Sach Book Table
+            generateBookTable(this.tbBook);
+            loadDataBook(this.tbBook, null);
 
-            //Account Table
-            generateAccountTable();
-            loadDataAccount(null);
+            // Muon Sach Account Table
+            generateAccountTable(this.tbAccount);
+            loadDataAccount(this.tbAccount, null);
+            
+            // Dat Sach Book Table
+            generateBookTable(this.tbDSBook);
+            loadDataBook(this.tbDSBook, null);
+
+            // Dat Sach Account Table
+            generateAccountTable(this.tbDSAccount);
+            loadDataAccount(this.tbDSAccount, null);
             
             //TraSach Account Table
             generateTableTraSachAccount();
@@ -192,11 +231,17 @@ public class ClientUIController implements Initializable {
     }    
     
     public void loadAllData() throws SQLException {
-        // Book Table
-        loadDataBook(null);
+        // Muon Sach Book Table
+        loadDataBook(this.tbBook, null);
             
-        // Account Table
-        loadDataAccount(null);
+        // Muon Sach Account Table
+        loadDataAccount(this.tbAccount, null);
+        
+        // Dat Sach Book Table
+        loadDataBook(this.tbDSBook, null);
+        
+        // Dat Sach Account Table
+        loadDataAccount(this.tbAccount, null);
         
         // TraSach Account Table
         loadtbTraSachAccountData(null);
@@ -216,16 +261,16 @@ public class ClientUIController implements Initializable {
         stage.show();
     }
    
-    private void loadDataBook(String kw) {
+    private void loadDataBook(TableView tb, String kw) {
         try {
             // Load Book Data
-            this.tbBook.setItems(FXCollections.observableList(s.getBook(kw)));
+            tb.setItems(FXCollections.observableList(s.getBook(kw)));
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    private void generateBookTable (){
+    private void generateBookTable (TableView tb){
         TableColumn col1 = new TableColumn("Id");
         col1.setCellValueFactory(new PropertyValueFactory("id"));
         col1.setPrefWidth(50);
@@ -254,28 +299,57 @@ public class ClientUIController implements Initializable {
         col7.setCellValueFactory(new PropertyValueFactory("status"));
         col7.setPrefWidth(50);
         
-        this.tbBook.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
+        tb.getColumns().addAll(col1, col2, col3, col4, col5, col6, col7);
     }
     
     public void bindingBook (MouseEvent evt){
         Book b = tbBook.getSelectionModel().getSelectedItem();  
         // Nếu status sách == 0 thì xuất thông báo k cho mượn
-        if(b != null && b.getStatus() != BookStatus.AVAILABLE){
-            Utils.showBox("Hiện tại sách này đã có người mượn, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+        if(b != null){
+            switch (b.getStatus()) {
+                case BookStatus.AVAILABLE:
+                case BookStatus.RESERVED:
+                    txtChonSach.setText(b.getName());
+                    txtBookID.setText("" + b.getId());
+                    txtBookPrice.setText("" + b.getPrice());
+                    break;
+                case BookStatus.BORROWED:
+                    Utils.showBox("Hiện tại sách này đang được người khác Mượn, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+                    break;
+                default:
+                    Utils.showBox("Hiện tại sách này hiện đang bảo dưỡng, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+                    break;
+            }
         }
-        else {
-            txtChonSach.setText(b.getName());
-            txtBookID.setText("" + b.getId());
-            txtBookPrice.setText("" + b.getPrice());
+    }
+    
+    public void bindingDatSachBook (MouseEvent evt){
+        Book b = tbDSBook.getSelectionModel().getSelectedItem();  
+        if(b != null){
+            switch (b.getStatus()) {
+                case BookStatus.AVAILABLE:
+                    txtDSChonSach.setText(b.getName());
+                    txtDSMaSach.setText("" + b.getId());
+                    break;
+                case BookStatus.RESERVED:
+                    Utils.showBox("Hiện tại sách này đang được người khác Đặt, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+                    break;
+                case BookStatus.BORROWED:
+                    Utils.showBox("Hiện tại sách này đang được người khác Mượn, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+                    break;
+                default:
+                    Utils.showBox("Hiện tại sách này hiện đang bảo dưỡng, vui lòng chọn sách khác", Alert.AlertType.ERROR).show();
+                    break;
+            }
         }
     }
     
     
-    private void loadDataAccount (String kw) throws SQLException{
-        this.tbAccount.setItems(FXCollections.observableList(a.getAccount(kw)));  
+    private void loadDataAccount (TableView tb, String kw) throws SQLException{
+        tb.setItems(FXCollections.observableList(a.getAccount(kw)));  
     }
     
-    private void generateAccountTable (){
+    private void generateAccountTable (TableView tb){
         TableColumn col1 = new TableColumn("Id");
         col1.setCellValueFactory(new PropertyValueFactory("id"));
         col1.setPrefWidth(50);
@@ -300,7 +374,7 @@ public class ClientUIController implements Initializable {
         col7.setCellValueFactory(new PropertyValueFactory("type"));
         col7.setPrefWidth(100);
         
-        this.tbAccount.getColumns().addAll(col1, col2, col4, col5, col6, col7);
+        tb.getColumns().addAll(col1, col2, col4, col5, col6, col7);
     }
     
     public void bindingAccount (MouseEvent evt){
@@ -310,6 +384,15 @@ public class ClientUIController implements Initializable {
             txtChonDocGia.setText("" + acc.getName());
             txtAccountID.setText("" + acc.getId());
             txtTotalBookLending.setText("" + 1);
+        }
+    }
+    
+    public void bindingDatSachAccount (MouseEvent evt){
+        Account acc = tbDSAccount.getSelectionModel().getSelectedItem();  
+        
+        if (acc != null) {
+            txtDSChonDocGia.setText("" + acc.getName());
+            txtDSMaDocGia.setText("" + acc.getId());
         }
     }
     
@@ -343,10 +426,18 @@ public class ClientUIController implements Initializable {
     private void toggleNavagition(String trigger) {
         switch (trigger) {
             case "DATSACH":
+                gpGroupTableDatSach.setOpacity(1);
+                gpGroupTextBoxDatSach.setOpacity(1);
+                gpGroupTableDatSach.toFront();
+                gpGroupTextBoxDatSach.toFront();
+                
                 gpGroupTableMuonSach.setOpacity(0);
                 gpGroupTextBoxMuonSach.setOpacity(0);
                 gpGroupTableTraSach.setOpacity(0);
                 gpGroupTextBoxTraSach.setOpacity(0);
+                
+                btnReserve.setOpacity(1);
+                btnReserve.toFront();
                 btnTraSach.setOpacity(0);
                 btnLending.setOpacity(0);
                 break;
@@ -356,22 +447,30 @@ public class ClientUIController implements Initializable {
                 gpGroupTextBoxMuonSach.setOpacity(1);
                 gpGroupTableMuonSach.toFront();
                 gpGroupTextBoxMuonSach.toFront();
+                
+                gpGroupTableDatSach.setOpacity(0);
+                gpGroupTextBoxDatSach.setOpacity(0);
                 gpGroupTableTraSach.setOpacity(0);
                 gpGroupTextBoxTraSach.setOpacity(0);
                 btnTraSach.setOpacity(0);
+                btnReserve.setOpacity(0);
                 btnLending.setOpacity(1);
                 btnLending.toFront();
                 break;
                 
             case "TRASACH":
-                gpGroupTableMuonSach.setOpacity(0);
-                gpGroupTextBoxMuonSach.setOpacity(0);
                 gpGroupTableTraSach.setOpacity(1);
                 gpGroupTextBoxTraSach.setOpacity(1);
                 gpGroupTableTraSach.toFront();
                 gpGroupTextBoxTraSach.toFront();
+                
+                gpGroupTableDatSach.setOpacity(0);
+                gpGroupTextBoxDatSach.setOpacity(0);
+                gpGroupTableMuonSach.setOpacity(0);
+                gpGroupTextBoxMuonSach.setOpacity(0);
                 btnTraSach.setOpacity(1);
                 btnTraSach.toFront();
+                btnReserve.setOpacity(0);
                 btnLending.setOpacity(0);
                 break;
                 
@@ -479,12 +578,26 @@ public class ClientUIController implements Initializable {
         
         if (lds.lendingBook(bookID, accountID, numberBookLending) == true) {
             Utils.showBox("Mượn sách thành công", Alert.AlertType.CONFIRMATION).show();
-            loadDataBook(null);
+            loadDataBook(this.tbBook, null);
         } else {
             Utils.showBox("Có lỗi xảy ra ", Alert.AlertType.ERROR).show();
         }
             
     }
+    
+    public void handleReserveBtn (ActionEvent event) throws IOException, SQLException {
+        int bookID = Integer.parseInt(txtDSMaSach.getText());
+        int accountID = Integer.parseInt(txtDSMaDocGia.getText());
+        
+        if (rds.reserveBook(bookID, accountID) == true) {
+            Utils.showBox("Đặt sách thành công", Alert.AlertType.CONFIRMATION).show();
+            loadDataBook(this.tbBook, null);
+        } else {
+            Utils.showBox("Có lỗi xảy ra trong quá trình đặt sách", Alert.AlertType.ERROR).show();
+        }
+            
+    }
+    
     
     public void handleReturnBookBtn (ActionEvent event) throws IOException, SQLException, ParseException {
         int lendingTicketID = Integer.parseInt(txtTraSachMaPhieuMuon.getText());

@@ -109,7 +109,7 @@ CREATE TABLE `book` (
   `publicationPlace` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `status` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ CREATE TABLE `book` (
 
 LOCK TABLES `book` WRITE;
 /*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',1),(6,'Sach xin','Đây Là Quyển Sách',50000,'2021-02-23 00:00:00','HN',1),(7,'Sách Không Xịn','Đây là sách không xịn',2000,'2111-11-01 00:00:00','HN',2);
+INSERT INTO `book` VALUES (1,'ABC','ABC',200,'2022-05-04 00:00:00','HCM',0),(5,'Dac nhan tam','Dac nhan tam',200,'2022-05-04 00:00:00','HCM',2),(6,'Sach xin','Đây Là Quyển Sách',50000,'2021-02-23 00:00:00','HN',1),(7,'Sách Không Xịn','Đây là sách không xịn',2000,'2111-11-01 00:00:00','HN',2),(8,'Soul Land','Đấu La Đại Lục – Một đại lục không hề yên bình, một cuộc sống đầy hiểm nguy, phiêu lưu nhưng cũng không kém phần lãng mạn. tình yêu, thù hận',25000,'2010-02-13 00:00:00','China',2),(9,'YÊU THẦN KÝ','Yêu Linh Sư Mạnh Nhất Thánh Linh Đại Lục Nhiếp Li, bởi vì một cuốn sách thần bí Yêu Linh Thời Không mà trở về năm 13 tuổi, tu luyện mạnh nhất công pháp, mạnh nhất yêu linh chi lực, đột p...',50000,'2010-10-10 00:00:00','China',3),(10,'Thần Đồng Đất Việt','Description of Thần Đồng Đất Việt',10000,'2001-01-22 00:00:00','HN',1),(11,'Trạng Quỷnh','Description of Trạng Quỷnh',15000,'2001-01-22 00:00:00','HN',1);
 /*!40000 ALTER TABLE `book` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,7 +197,7 @@ CREATE TABLE `lending_detail` (
 
 LOCK TABLES `lending_detail` WRITE;
 /*!40000 ALTER TABLE `lending_detail` DISABLE KEYS */;
-INSERT INTO `lending_detail` VALUES ('2022-05-22 00:00:00',200,5,28),('2022-05-22 00:00:00',50000,6,27),('2022-05-22 00:00:00',50000,6,28),('2022-05-22 00:00:00',2000,7,27),('2022-03-22 00:00:00',2000,7,29);
+INSERT INTO `lending_detail` VALUES ('2022-05-22 00:00:00',200,5,28),('2022-05-23 00:00:00',200,5,29),('2022-05-22 00:00:00',50000,6,27),('2022-05-22 00:00:00',50000,6,28),('2022-05-22 00:00:00',2000,7,27),('2022-03-22 00:00:00',2000,7,29),('2022-05-23 00:00:00',25000,8,29);
 /*!40000 ALTER TABLE `lending_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +226,7 @@ CREATE TABLE `lendingticket` (
 
 LOCK TABLES `lendingticket` WRITE;
 /*!40000 ALTER TABLE `lendingticket` DISABLE KEYS */;
-INSERT INTO `lendingticket` VALUES (27,'2022-04-22 00:00:00',1,7,0),(28,'2022-04-22 00:00:00',2,1,0),(29,'2022-04-22 00:00:00',1,7,1);
+INSERT INTO `lendingticket` VALUES (27,'2022-04-22 00:00:00',1,7,0),(28,'2022-04-22 00:00:00',2,1,0),(29,'2022-04-22 00:00:00',3,7,1);
 /*!40000 ALTER TABLE `lendingticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,6 +314,7 @@ CREATE TABLE `reservation_detail` (
 
 LOCK TABLES `reservation_detail` WRITE;
 /*!40000 ALTER TABLE `reservation_detail` DISABLE KEYS */;
+INSERT INTO `reservation_detail` VALUES ('2022-04-25 00:00:00',8,1),('2022-04-25 00:00:00',9,1);
 /*!40000 ALTER TABLE `reservation_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,7 +334,7 @@ CREATE TABLE `reservationticket` (
   PRIMARY KEY (`id`),
   KEY `accountID` (`accountID`),
   CONSTRAINT `reservationticket_ibfk_1` FOREIGN KEY (`accountID`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -342,6 +343,7 @@ CREATE TABLE `reservationticket` (
 
 LOCK TABLES `reservationticket` WRITE;
 /*!40000 ALTER TABLE `reservationticket` DISABLE KEYS */;
+INSERT INTO `reservationticket` VALUES (1,'2022-04-23 00:00:00',1,2,7);
 /*!40000 ALTER TABLE `reservationticket` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -354,4 +356,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-22 11:53:49
+-- Dump completed on 2022-04-23 10:25:07
