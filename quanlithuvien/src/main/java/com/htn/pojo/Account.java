@@ -196,5 +196,9 @@ public class Account {
     public void setTotalBookLended(int totalBookLended) {
         this.totalBookLended = totalBookLended;
     }
+
+    public boolean next() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
