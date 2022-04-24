@@ -7,6 +7,7 @@ package com.htn.quanlithuvien;
 import com.htn.pojo.Account;
 import com.htn.services.AccountServices;
 import com.htn.utils.Utils;
+import com.htn.utils.Utils2;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -66,6 +67,9 @@ public class SignUpController implements Initializable {
         }
         else if((Date) Utils.toSqlDate(this.txtBirthday.getText()) == null){
             Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
+        }
+        else if(Utils2.convertSqlDateToUtilDate((Date) Utils.toSqlDate(this.txtBirthday.getText())).after(Utils2.convertSqlDateToUtilDate(Utils.getCurrentDate2()))){
+            Utils.showBox("Date not invalid!", Alert.AlertType.WARNING).show();
         }
         else if(cbGender.getValue().equals("")){
             Utils.showBox("Not choose Gender!", Alert.AlertType.WARNING).show();

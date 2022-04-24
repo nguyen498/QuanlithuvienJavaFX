@@ -126,5 +126,13 @@ public class Utils {
         
         return difference_In_Days;
     }
+    
+    public static String xuatNgayThangNam3(java.util.Date ntn) {
+        if (ntn != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
+            return formatter.format(ntn);
+        }else
+            return "n/a";
+    }
 }
