@@ -8,14 +8,18 @@ import com.htn.pojo.Account;
 import com.htn.pojo.AccountType;
 import com.htn.pojo.Author;
 import com.htn.pojo.Book;
+import com.htn.pojo.BookAuthor;
+import com.htn.pojo.Book_Cates;
 import com.htn.pojo.Category;
 import com.htn.pojo.LendingTicket;
 import com.htn.pojo.LibraryCard;
 import com.htn.pojo.Payment;
 import com.htn.pojo.ReservationTicket;
 import com.htn.services.AccountServices;
+import com.htn.services.AuthorBookServices;
 import com.htn.services.AuthorServices;
 import com.htn.services.BookServices;
+import com.htn.services.CateBookServices;
 import com.htn.services.CategoryServices;
 import com.htn.services.LendingTicketServices;
 import com.htn.services.LibraryCardServices;
@@ -25,6 +29,7 @@ import com.htn.utils.Utils;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,6 +61,9 @@ public class ManagerGUIController implements Initializable {
     private static final LendingTicketServices lendingTicketServices = new LendingTicketServices();
     private static final ReserveTicketServices reserveTicketServices = new ReserveTicketServices();
     private static final PaymentServices paymentServices = new PaymentServices();
+    private static final AuthorBookServices authorBookServices = new AuthorBookServices();
+    private static final CateBookServices cateBookServices = new CateBookServices();
+    private Calendar calendar = Calendar.getInstance();
     
     /**
      * Initializes the controller class.
@@ -105,6 +113,8 @@ public class ManagerGUIController implements Initializable {
     
     //region attribute card
     @FXML private TableView <LibraryCard> tbCards;
+    @FXML private ComboBox <Account> cbAccount;
+    @FXML private TextField txtCardNumber;
     //endregion
     
     //region attribute LendingTicket
@@ -119,6 +129,18 @@ public class ManagerGUIController implements Initializable {
     @FXML private TableView <Payment> tbPayment;
     //endregion
     
+    //region attribute book_author
+    @FXML private TableView <BookAuthor> tbBookAuthor;
+    @FXML private ComboBox <Book> cbBook1;
+    @FXML private ComboBox <Author> cbAuthors;
+    //endregion
+    
+    //region attribute book_cate
+    @FXML private TableView <Book_Cates> tbBookCate;
+    @FXML private ComboBox <Book> cbBook2;
+    @FXML private ComboBox <Category> cbCategories;
+    //endregion
+    
     //Region book manager
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -131,6 +153,35 @@ public class ManagerGUIController implements Initializable {
         cbGender.setValue(listGender.get(0));
         cbAccountType.setItems(listAccountType);
         cbAccountType.setValue(listAccountType.get(1));
+        try {
+            this.cbAccount.setItems(FXCollections.observableList(a.getAccount(null)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            this.cbBook1.setItems(FXCollections.observableList(s.getBook(null)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            this.cbBook2.setItems(FXCollections.observableList(s.getBook(null)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            this.cbCategories.setItems(FXCollections.observableList(c.getCategory(null)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        try {
+            this.cbAuthors.setItems(FXCollections.observableList(au.getAuthor(null)));
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         this.txtKeyWord.textProperty().addListener((evt) ->{
             this.loadDataBook(this.txtKeyWord.getText());
@@ -200,6 +251,20 @@ public class ManagerGUIController implements Initializable {
         this.loadColumnPayment();
         try {
             this.loadDataPayment();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.loadColumnBookAuthor();
+        try {
+            this.loadDataBookAuthor();
+        } catch (SQLException ex) {
+            Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.loadColumnBookCategory();
+        try {
+            this.loadDataBookCategory();
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -659,6 +724,62 @@ public class ManagerGUIController implements Initializable {
     }
     //endregion
     
+    //region book_author manager
+    private void loadColumnBookAuthor (){
+        TableColumn col1 = new TableColumn("BookName");
+        col1.setCellValueFactory(new PropertyValueFactory("bookName"));
+        col1.setPrefWidth(200);
+        
+        TableColumn col2 = new TableColumn("AuthorName");
+        col2.setCellValueFactory(new PropertyValueFactory("authorName"));
+        col2.setPrefWidth(200);
+        
+        this.tbBookAuthor.getColumns().addAll(col1, col2);
+    }
+    
+    private void loadDataBookAuthor () throws SQLException{
+        this.tbBookAuthor.setItems(FXCollections.observableList(authorBookServices.getBookAuthor()));
+    }
+    
+    public void addAuthorBook (ActionEvent evt) throws SQLException{
+        if (authorBookServices.addAuthorBook(this.cbBook2.getSelectionModel().getSelectedItem().getId(), this.cbAuthors.getSelectionModel().getSelectedItem().getId()) == true) {
+            Utils.showBox("Add successfully !", Alert.AlertType.INFORMATION).show();
+            this.loadDataBookAuthor();
+        } else {
+            Utils.showBox("Add failed", Alert.AlertType.WARNING).show();
+        }
+    
+    }
+    //endregion
+    
+    //region book_cates manager
+    private void loadColumnBookCategory (){
+        TableColumn col1 = new TableColumn("BookName");
+        col1.setCellValueFactory(new PropertyValueFactory("bookName"));
+        col1.setPrefWidth(200);
+        
+        TableColumn col2 = new TableColumn("Category");
+        col2.setCellValueFactory(new PropertyValueFactory("cateName"));
+        col2.setPrefWidth(200);
+        
+        this.tbBookCate.getColumns().addAll(col1, col2);
+    }
+    
+    private void loadDataBookCategory () throws SQLException{
+        this.tbBookCate.setItems(FXCollections.observableList(cateBookServices.getBookCates()));
+    }
+    
+    public void addCateBook (ActionEvent evt) throws SQLException{
+        if (cateBookServices.addCateBook(this.cbBook1.getSelectionModel().getSelectedItem().getId(), this.cbCategories.getSelectionModel().getSelectedItem().getId()) == true) {
+            Utils.showBox("Add successfully !", Alert.AlertType.INFORMATION).show();
+            this.loadDataBookCategory();
+        } else {
+            Utils.showBox("Add failed", Alert.AlertType.WARNING).show();
+        }
+    
+    }
+    //endregion
+    
     //region card manager
     private void loadColumnCard (){
         TableColumn col1 = new TableColumn("cardNumber");
@@ -697,6 +818,49 @@ public class ManagerGUIController implements Initializable {
             this.tbCards.setItems(FXCollections.observableList(cardServices.getCards(kw)));
         } catch (SQLException ex) {
             Logger.getLogger(ManagerGUIController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void activeCard (ActionEvent evt) throws SQLException{
+        String name = this.cbAccount.getSelectionModel().getSelectedItem().getName();
+        String gender = this.cbAccount.getSelectionModel().getSelectedItem().getGender();
+        Date birthday = this.cbAccount.getSelectionModel().getSelectedItem().getBirthday();
+        int accountType = this.cbAccount.getSelectionModel().getSelectedItem().getType();
+        int accountID = this.cbAccount.getSelectionModel().getSelectedItem().getId();
+        LibraryCard lc = new LibraryCard (name, gender, birthday, Utils.toSqlDate(Utils.xuatNgayThangNam2(calendar.getTime())), 1, accountType, accountID);
+        
+        if (cardServices.addLibraryCard(lc) == true) {
+            Utils.showBox("Active successfully !", Alert.AlertType.INFORMATION).show();
+            this.loadDataCards(null);
+        } else {
+             Utils.showBox("Active failed", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void bindingCard(MouseEvent evt){
+        LibraryCard lc = tbCards.getSelectionModel().getSelectedItem(); 
+        this.txtCardNumber.setText("" + lc.getCardNumber());
+    }
+    
+    public void active (ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtCardNumber.getText());
+        
+        if (cardServices.changeActive(0, id) == true) {
+            Utils.showBox("Active successfully !", Alert.AlertType.INFORMATION).show();
+            this.loadDataCards(null);
+        } else {
+             Utils.showBox("Active failed", Alert.AlertType.WARNING).show();
+        }
+    }
+    
+    public void block (ActionEvent evt) throws SQLException{
+        int id = Integer.parseInt(this.txtCardNumber.getText());
+        
+        if (cardServices.changeActive(1, id) == true) {
+            Utils.showBox("Block successfully !", Alert.AlertType.INFORMATION).show();
+            this.loadDataCards(null);
+        } else {
+             Utils.showBox("Block failed", Alert.AlertType.WARNING).show();
         }
     }
     //endregion
