@@ -26,6 +26,7 @@ import com.htn.services.LibraryCardServices;
 import com.htn.services.PaymentServices;
 import com.htn.services.ReserveTicketServices;
 import com.htn.utils.Utils;
+import com.htn.utils.Utils2;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -327,8 +328,11 @@ public class ManagerGUIController implements Initializable {
         else if(txtDateOfPurcharse.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter DateOfPurcharse!", Alert.AlertType.WARNING).show();
         }
+        else if(Utils2.convertSqlDateToUtilDate((Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText())).after(Utils2.convertSqlDateToUtilDate(Utils.getCurrentDate2()))){
+            Utils.showBox("Date not invalid!", Alert.AlertType.WARNING).show();
+        }
         else if(txtPublicationPlace.getText().replaceAll(" ", "").equals("")){
-            Utils.showBox("Not choose PublicationPlace!", Alert.AlertType.WARNING).show();
+            Utils.showBox("Not enter PublicationPlace!", Alert.AlertType.WARNING).show();
         }
         else if((Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText()) == null){
             Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
@@ -392,6 +396,9 @@ public class ManagerGUIController implements Initializable {
         }
         else if((Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText()) == null){
             Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
+        }
+        else if(Utils2.convertSqlDateToUtilDate((Date) Utils.toSqlDate(this.txtDateOfPurcharse.getText())).after(Utils2.convertSqlDateToUtilDate(Utils.getCurrentDate2()))){
+            Utils.showBox("Date not invalid!", Alert.AlertType.WARNING).show();
         }
         else if(txtPublicationPlace.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter PublicationPlace!", Alert.AlertType.WARNING).show();
@@ -505,6 +512,9 @@ public class ManagerGUIController implements Initializable {
         else if(txtbirthdate.getText().replaceAll(" ", "").equals("")){
             Utils.showBox("Not enter birthday!", Alert.AlertType.WARNING).show();
         }
+        else if(Utils2.convertSqlDateToUtilDate((Date) Utils.toSqlDate(this.txtbirthdate.getText())).after(Utils2.convertSqlDateToUtilDate(Utils.getCurrentDate2()))){
+            Utils.showBox("Date not invalid!", Alert.AlertType.WARNING).show();
+        }
         else if((Date) Utils.toSqlDate(this.txtbirthdate.getText()) == null){
             Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
         }
@@ -549,6 +559,9 @@ public class ManagerGUIController implements Initializable {
         }
         else if((Date) Utils.toSqlDate(this.txtbirthdate.getText()) == null){
             Utils.showBox("Not date format!", Alert.AlertType.WARNING).show();
+        }
+        else if(Utils2.convertSqlDateToUtilDate((Date) Utils.toSqlDate(this.txtbirthdate.getText())).after(Utils2.convertSqlDateToUtilDate(Utils.getCurrentDate2()))){
+            Utils.showBox("Date not invalid!", Alert.AlertType.WARNING).show();
         }
         else{
             int id = Integer.parseInt(this.txtIdAccount.getText());
