@@ -32,6 +32,13 @@ public class Category {
         this.name = rs.getString("name");
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
+    
+    
+
     /**
      * @return the id
      */

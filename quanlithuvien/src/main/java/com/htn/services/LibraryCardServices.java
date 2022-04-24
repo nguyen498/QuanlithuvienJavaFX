@@ -23,7 +23,7 @@ public class LibraryCardServices {
         try (Connection conn = JdbcUtils.getConn()) {
             String sql = "SELECT librarycard.cardNumber, account.name, account.gender, account.birthdate, account.accountType ,librarycard.issuedAt, librarycard.active\n" +
                          "FROM librarydb.librarycard, librarydb.account\n" +
-                         "WHERE librarycard.cardNumber = account.id and name like concat ('%',?,'%');;";
+                         "WHERE librarycard.account_id = account.id and name like concat ('%',?,'%');";
             PreparedStatement stm = conn.prepareStatement(sql);
             if (kw == null)
                 kw = "";
@@ -42,13 +42,28 @@ public class LibraryCardServices {
          }
     }
     public boolean addLibraryCard (LibraryCard lc) throws SQLException{
-        String sql = "INSERT INTO librarycard (issuedAt, active, account_id) " + "VALUES (?, ?, ?";
+        String sql = "INSERT INTO librarycard (issuedAt, active, account_id) " + "VALUES (?, ?, ?)";
         try (Connection conn = JdbcUtils.getConn()) {
                 conn.setAutoCommit(false);
                 PreparedStatement stm = conn.prepareStatement(sql);
                 stm.setDate(1, lc.getIssuedAt());
                 stm.setInt(2, lc.getActive());
-                stm.setInt(3, lc.getAccountType());
+                stm.setInt(3, lc.getAccountID());
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
+    
+    public boolean changeActive (int active, int id) throws SQLException{
+        String sql = "UPDATE librarycard SET active = ? WHERE cardNumber in (?);";
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, active);
+                stm.setInt(2, id);
                 
                 stm.executeUpdate();
 
