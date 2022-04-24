@@ -4,6 +4,8 @@
  */
 package com.htn.services;
 
+import com.htn.pojo.BookStatus;
+import com.htn.pojo.Constants;
 import com.htn.utils.JdbcUtils;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -142,13 +144,63 @@ public class ReserveTicketServices {
         
     }
     
-    public boolean updateLendingTicketStatus (int lendingTicketID, int status) throws SQLException{
-        String sql = "UPDATE lendingticket SET status = ? WHERE id in (?);";
+    public boolean updateReservationTicketStatus (int reserveTicketID, int status) throws SQLException{
+        String sql = "UPDATE reservationticket SET status = ? WHERE id in (?);";
         try (Connection conn = JdbcUtils.getConn()) {
                 conn.setAutoCommit(false);
                 PreparedStatement stm = conn.prepareStatement(sql);
                 stm.setInt(1, status);
-                stm.setInt(2, lendingTicketID);
+                stm.setInt(2, reserveTicketID);
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
+    
+    
+    public boolean createAutoUpdateBookStatus (int reserveTicketID) throws SQLException{
+        String sql =    "create event if not exists auto_update_book_status_for_?\n" +
+                        "on schedule at current_time + INTERVAL ? day\n" +
+                        "do\n" +
+                        "	-- Cập Nhật những sách đã đặt về trạng thái bình thường -- \n" +
+                        "UPDATE book\n" +
+                        "SET status = ?\n" +
+                        "WHERE id IN (SELECT reservation_detail.bookID \n" +
+                        "             FROM reservationticket, reservation_detail\n" +
+                        "             where reservationticket.id = ?);";
+        
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, reserveTicketID);
+                stm.setInt(2, Constants.MAX_RESERVATION_DAYS);
+                stm.setInt(3, BookStatus.AVAILABLE);
+                stm.setInt(4, reserveTicketID);
+                
+                stm.executeUpdate();
+
+                conn.commit();
+        }
+        return true;
+    }
+    
+    public boolean createReservationTicketAutoRemoval (int reserveTicketID) throws SQLException{
+        String sql =    "create event if not exists reservation_ticket_auto_removal_for_?\n" +
+                        "on schedule at current_time + INTERVAL ? day\n" +
+                        "do\n" +
+                        "UPDATE reservationticket SET status = ? WHERE id = ?;";
+        
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+                conn.setAutoCommit(false);
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setInt(1, reserveTicketID);
+                stm.setInt(2, Constants.MAX_RESERVATION_DAYS);
+                stm.setInt(3, ReservationStatus.RETURNED);
+                stm.setInt(4, reserveTicketID);
                 
                 stm.executeUpdate();
 

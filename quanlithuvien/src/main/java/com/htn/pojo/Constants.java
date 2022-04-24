@@ -14,7 +14,7 @@ public class Constants {
     // Số ngày cho mượn tối đa  
     public static final int MAX_LENDING_DAYS = 30;
     // Số ngày cho đặt tối đa  
-    public static final int MAX_RESERVATION_DAYS = 2;
+    public static final int MAX_RESERVATION_DAYS = 15;
     // Số tiền phạt khi trả trễ 1 ngày
     public static final int FINE_IN_1_DAY = 5000;
 }
