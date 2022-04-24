@@ -96,6 +96,17 @@ public class ReservationDetailServices {
             return false;
         }
         
+        // Tạo Scheduler tự động cập nhật trạng thái sách về AVAILABLE
+        if (rts.createAutoUpdateBookStatus(reserveTicketID) == false) {
+            Utils.showBox("Xảy ra lỗi trong quá trình Tạo Auto Scheduler!!", Alert.AlertType.ERROR).show();
+            return false;
+        }
+        // Tạo Scheduler tự động hủy ReservationTicket sau 2 ngày khách không mượn sách
+        if (rts.createReservationTicketAutoRemoval(reserveTicketID) == false) {
+            Utils.showBox("Xảy ra lỗi trong quá trình Tạo Auto Scheduler!!", Alert.AlertType.ERROR).show();
+            return false;
+        }
+        
         
         return true;
     }
