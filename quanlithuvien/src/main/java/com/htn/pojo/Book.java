@@ -53,6 +53,13 @@ public class Book {
         this.publicationPlace = rs.getString("publicationPlace");
         this.status = rs.getInt("status");
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+    
+    
     
     /**
      * @return the id

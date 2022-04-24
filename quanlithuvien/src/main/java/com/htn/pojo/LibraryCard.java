@@ -20,11 +20,12 @@ public class LibraryCard {
     private Date issuedAt;
     private int active;
     private int accountType;
+    private int accountID;
 
     public LibraryCard() {
     }
 
-    public LibraryCard(int cardNumber, String name, String gender, Date birthdate, Date issuedAt, int active, int accountType) {
+    public LibraryCard(int cardNumber, String name, String gender, Date birthdate, Date issuedAt, int active, int accountType, int accountID) {
         this.cardNumber = cardNumber;
         this.name = name;
         this.gender = gender;
@@ -32,6 +33,17 @@ public class LibraryCard {
         this.issuedAt = issuedAt;
         this.active = active;
         this.accountType = accountType;
+        this.accountID = accountID;
+    }
+    
+    public LibraryCard(String name, String gender, Date birthdate, Date issuedAt, int active, int accountType, int accountID) {
+        this.name = name;
+        this.gender = gender;
+        this.birthdate = birthdate;
+        this.issuedAt = issuedAt;
+        this.active = active;
+        this.accountType = accountType;
+        this.accountID = accountID;
     }
     
     public LibraryCard (ResultSet rs) throws SQLException{
@@ -140,6 +152,20 @@ public class LibraryCard {
      */
     public void setAccountType(int accountType) {
         this.accountType = accountType;
+    }
+
+    /**
+     * @return the accountID
+     */
+    public int getAccountID() {
+        return accountID;
+    }
+
+    /**
+     * @param accountID the accountID to set
+     */
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
     }
     
     
