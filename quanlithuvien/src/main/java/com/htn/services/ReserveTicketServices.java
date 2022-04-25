@@ -84,7 +84,7 @@ public class ReserveTicketServices {
     public ReservationTicket getReservingReserveTicketByBookID (int bookID) throws SQLException{
         try (Connection conn = JdbcUtils.getConn()) {
             String sql = "SELECT reservationticket.* FROM reservationticket, reservation_detail \n" +
-                         "WHERE bookID = ? AND status = ?";
+                         "WHERE bookID = ? AND status = ? AND reservationticket.id = reservation_detail.reservationID";
             PreparedStatement stm = conn.prepareStatement(sql);
             
             stm.setInt(1, bookID);
@@ -169,7 +169,7 @@ public class ReserveTicketServices {
                         "SET status = ?\n" +
                         "WHERE id IN (SELECT reservation_detail.bookID \n" +
                         "             FROM reservationticket, reservation_detail\n" +
-                        "             where reservationticket.id = ?);";
+                        "             where reservationticket.id = ? AND reservationticket.status = ?);";
         
         
         try (Connection conn = JdbcUtils.getConn()) {
@@ -179,6 +179,7 @@ public class ReserveTicketServices {
                 stm.setInt(2, Constants.MAX_RESERVATION_DAYS);
                 stm.setInt(3, BookStatus.AVAILABLE);
                 stm.setInt(4, reserveTicketID);
+                stm.setInt(5, ReservationStatus.RESERVING);
                 
                 stm.executeUpdate();
 
