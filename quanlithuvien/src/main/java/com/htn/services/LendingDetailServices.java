@@ -145,6 +145,7 @@ public class LendingDetailServices {
             return false;
         }
         
+        
         /*
             Nếu tìm lendingTicket với trạng thái BORROWING mà không có => thì tạo mới 
         */
