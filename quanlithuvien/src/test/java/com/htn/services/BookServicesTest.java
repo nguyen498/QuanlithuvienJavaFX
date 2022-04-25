@@ -9,10 +9,13 @@ import com.htn.pojo.Author;
 import com.htn.pojo.Book;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.htn.utils.JdbcUtils;
 import com.htn.utils.Utils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -30,7 +33,7 @@ public class BookServicesTest {
     @Test
     public void GetBookReturnOrNot() throws SQLException
     {
-        List<Book> acc = service.getBook("Dac nhan tam");
+        List<Book> acc = service.getBook(GetAllBook().get(0).getName());
         assertNotEquals(0, acc.size());
     }
     @Test
@@ -42,10 +45,11 @@ public class BookServicesTest {
     @Test
     public void GetBookReturnCorrectName() throws SQLException
     {
-        List<Book> acc = service.getBook("Dac nhan tam");
+        Book temp = GetAllBook().get(0);
+        List<Book> acc = service.getBook(temp.getName());
         for(int i = 0;i < acc.size();i++)
         {
-            assertTrue(acc.get(i).getName().contains("Dac nhan tam"));
+            assertTrue(acc.get(i).getName().contains(temp.getName()));
         }
     }
 
@@ -53,7 +57,8 @@ public class BookServicesTest {
     @Test
     public void GetBookIDReturnRight() throws SQLException
     {
-        assertTrue(service.getBookByID(1).getName().contains("ABC"));
+        Book temp = GetAllBook().get(0);
+        assertEquals(temp.getId(),service.getBookByID(temp.getId()).getId());
     }
 
     @Test
@@ -278,5 +283,16 @@ public class BookServicesTest {
     @Test
     public void DeleteNonExistBookTest() throws SQLException {
         assertFalse(service.deleteBook(-99));
+    }
+
+
+    public List<Book> GetAllBook() throws SQLException {
+        List<Book> acc = new ArrayList<Book>();
+        ResultSet a = JdbcUtils.getConn().prepareStatement("select * from book").executeQuery();
+        while(a.next())
+        {
+            acc.add(new Book(a));
+        }
+        return acc;
     }
 }

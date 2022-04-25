@@ -8,11 +8,15 @@ import com.htn.pojo.Account;
 import com.htn.pojo.Author;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.htn.utils.JdbcUtils;
 import com.htn.utils.Utils;
+import com.mysql.cj.jdbc.JdbcConnection;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,7 +29,7 @@ public class AuthorServicesTest {
     @Test
     public void GetAuthorReturnOrNot() throws SQLException
     {
-        List<Author> acc = service.getAuthor("Nam");
+        List<Author> acc = service.getAuthor(GetAllAuthor().get(0).getName());
         assertNotEquals(0, acc.size());
     }
     @Test
@@ -37,10 +41,11 @@ public class AuthorServicesTest {
     @Test
     public void GetAuthorReturnCorrectName() throws SQLException
     {
-        List<Author> acc = service.getAuthor("Nam");
+        String a = GetAllAuthor().get(0).getName();
+        List<Author> acc = service.getAuthor(a);
         for(int i = 0;i < acc.size();i++)
         {
-            assertTrue(acc.get(i).getName().contains("Nam"));
+            assertTrue(acc.get(i).getName().contains(a));
         }
     }
 
@@ -127,6 +132,16 @@ public class AuthorServicesTest {
     @Test
     public void DeleteAuthorTest() throws SQLException {
         assertTrue(service.deleteAuthor(2));
+    }
+
+    public List<Author> GetAllAuthor() throws SQLException {
+        List<Author> acc = new ArrayList<>();
+        ResultSet a = JdbcUtils.getConn().prepareStatement("Select * from author").executeQuery();
+        while(a.next())
+        {
+            acc.add(new Author(a));
+        }
+        return acc;
     }
     
 }

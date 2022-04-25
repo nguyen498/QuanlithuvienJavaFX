@@ -48,7 +48,7 @@ public class AccountServicesTest {
 
     @Test
     public void GetAccountIDReturnRight() throws SQLException {
-        assertTrue(service.getAccountByID(1).getName().contains("Nguyên"));
+        assertTrue(service.getAccountByID(1).getId() == 1);
     }
 
 
