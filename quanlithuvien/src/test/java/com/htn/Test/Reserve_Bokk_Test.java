@@ -1,9 +1,11 @@
-package com.htn.services;
+package com.htn.Test;
 
 import com.htn.pojo.LendingDetail;
 import com.htn.pojo.LendingTicket;
 import com.htn.pojo.ReservationDetail;
 import com.htn.pojo.ReservationTicket;
+import com.htn.services.ReservationDetailServices;
+import com.htn.services.ReserveTicketServices;
 import com.htn.utils.JdbcUtils;
 import com.htn.utils.Utils;
 import org.junit.jupiter.api.Test;

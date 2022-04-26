@@ -1,7 +1,8 @@
-package com.htn.services;
+package com.htn.Test;
 
 import com.htn.pojo.LibraryCard;
 import com.htn.pojo.ReservationTicket;
+import com.htn.services.LibraryCardServices;
 import com.htn.utils.JdbcUtils;
 import com.htn.utils.Utils;
 import javafx.util.Pair;
@@ -21,4 +22,20 @@ public class LibraryCardTest {
         assertTrue(LCS.changeActive(0,1));
     }
 
+
+    @Test
+    public void ActivateCardDuplicate() throws SQLException {
+        boolean flag = false;
+        try {
+            LibraryCard lb = new LibraryCard();
+            lb.setIssuedAt((Date) Utils.toSqlDate("1/1/2000"));
+            lb.setAccountID(1);
+            lb.setActive(0);
+            LCS.addLibraryCard(lb);
+        }catch (Exception e)
+        {
+            flag = true;
+        }
+        assertTrue(flag);
+    }
 }
